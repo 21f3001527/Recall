@@ -1,0 +1,33 @@
+[project]
+name = "study-assistant"
+version = "0.1.0"
+description = "AI-powered study assistant with RAG"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+
+dependencies = [
+    "streamlit>=1.38",
+    "python-dotenv>=1.0",
+    "langchain==0.3.*",
+    "langchain-core==0.3.*",
+    "langchain-community==0.3.*",
+    "langchain-text-splitters==0.3.*",
+    "langchain-groq>=0.2",
+    "langchain-huggingface>=0.1",
+    "langchain-chroma>=0.2",
+    "chromadb>=0.5",
+    "sentence-transformers>=3.0",
+    "pypdf>=4.0",
+    "pydantic>=2.0",
+    "torch>=2.13.0",
+    "torchvision>=0.28.0",
+    "torchaudio>=2.11.0",
+]
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true

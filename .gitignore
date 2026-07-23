@@ -1,0 +1,19 @@
+# Secrets
+.env
+
+# Data generated at runtime (recreated automatically)
+chroma_db/
+study_assistant.db
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+
+data/chroma_db/
+data/study_assistant.db
+
+# Streamlit
+.streamlit/secrets.toml
