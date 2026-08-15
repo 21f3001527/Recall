@@ -1,0 +1,82 @@
+[
+  {
+    "question": "What is NumPy and what is its main array object?",
+    "ground_truth": "NumPy is an open-source Python library used for numerical computation, scientific computing, data analysis, and machine learning/deep learning. Its main array object is the multidimensional ndarray."
+  },
+  {
+    "question": "Why is NumPy generally faster than plain Python lists for numerical operations?",
+    "ground_truth": "NumPy uses optimized compiled C code and vectorized operations, avoiding Python-level loops. Its arrays also use a compact memory layout that is more cache-friendly."
+  },
+  {
+    "question": "What is the difference between arange() and linspace() in NumPy?",
+    "ground_truth": "arange() generates values using a specified step size, while linspace() generates a specified number of evenly spaced values between the start and stop values, including the stop value."
+  },
+  {
+    "question": "For an array with shape (2, 3), what are its ndim and size?",
+    "ground_truth": "Its ndim is 2 because it has two dimensions, and its size is 6 because it contains 2 × 3 = 6 elements."
+  },
+  {
+    "question": "What is the difference between shape, size, ndim, and dtype in a NumPy array?",
+    "ground_truth": "shape gives the dimensions of the array, size gives the total number of elements, ndim gives the number of dimensions, and dtype gives the data type of the elements."
+  },
+  {
+    "question": "What is the difference between slicing and fancy indexing in NumPy?",
+    "ground_truth": "Slicing uses a start:stop:step range and returns a view, while fancy indexing uses an explicit list of indices and returns a copy."
+  },
+  {
+    "question": "What is the difference between reshape(), ravel(), and flatten()?",
+    "ground_truth": "reshape() changes the shape without changing the data when possible. ravel() flattens an array and returns a view when possible, while flatten() always returns a new copy."
+  },
+  {
+    "question": "What happens when a NumPy view is modified?",
+    "ground_truth": "A view shares the same underlying memory as the original array, so modifying the view can also modify the original array."
+  },
+  {
+    "question": "What is the difference between view() and copy() in NumPy?",
+    "ground_truth": "view() creates a new array object that shares the underlying memory with the original, while copy() creates an independent array with its own memory."
+  },
+  {
+    "question": "What is broadcasting in NumPy?",
+    "ground_truth": "Broadcasting allows NumPy to perform arithmetic operations on arrays with different but compatible shapes by virtually expanding the smaller array without actually copying its data."
+  },
+  {
+    "question": "What are the rules used to determine whether two NumPy array shapes are compatible for broadcasting?",
+    "ground_truth": "Shapes are compared from the rightmost dimension moving left. Two dimensions are compatible when they are equal or when one of them is 1. If neither condition holds for a dimension, NumPy raises a ValueError."
+  },
+  {
+    "question": "If a has shape (2, 3) and b has shape (3,), what happens when a + b is performed?",
+    "ground_truth": "The (3,) array is broadcast across each row of the (2, 3) array, so element-wise addition is performed between b and every row of a."
+  },
+  {
+    "question": "What is a NumPy ufunc and why is it useful?",
+    "ground_truth": "A ufunc, or universal function, performs an operation element-wise on NumPy arrays. Built-in ufuncs are implemented using compiled C loops, avoiding Python-level loops and providing efficient numerical operations."
+  },
+  {
+    "question": "What is the difference between axis=0 and axis=1 when aggregating a 2D NumPy array?",
+    "ground_truth": "axis=0 collapses the rows and performs the aggregation column-wise, while axis=1 collapses the columns and performs the aggregation row-wise."
+  },
+  {
+    "question": "What is the difference between argmin() and min(), and between argmax() and max()?",
+    "ground_truth": "min() and max() return the minimum and maximum values, while argmin() and argmax() return the indices of those values."
+  },
+  {
+    "question": "What is the difference between element-wise multiplication and matrix multiplication in NumPy?",
+    "ground_truth": "The * operator performs element-wise multiplication, multiplying corresponding elements. The @ operator, np.dot(), or np.matmul() performs matrix multiplication using row-column products."
+  },
+  {
+    "question": "What is the difference between np.vstack() and np.stack()?",
+    "ground_truth": "vstack() joins arrays vertically along an existing axis, while stack() creates a new dimension when combining the arrays."
+  },
+  {
+    "question": "What is the difference between np.random.shuffle() and np.random.permutation()?",
+    "ground_truth": "shuffle() modifies the original array in place, while permutation() returns a new shuffled copy and leaves the original array unchanged."
+  },
+  {
+    "question": "Why is np.random.seed() useful in machine learning experiments?",
+    "ground_truth": "Setting a random seed makes random results reproducible, which is useful for debugging experiments and ensuring that results can be reproduced."
+  },
+  {
+    "question": "What is the difference between NumPy .npy/.npz files and CSV/text files?",
+    "ground_truth": ".npy and .npz preserve NumPy array dtype and shape and generally load faster, while CSV/text files are human-readable and more portable across tools such as Excel and Pandas."
+  }
+]
