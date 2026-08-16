@@ -1,5 +1,5 @@
 """
-Study Assistant — Streamlit UI.
+Study Assistant -- Streamlit UI.
 
 This file only handles UI + session state. All AI/data logic lives in
 backend/ so the app stays easy to read and modify.
@@ -21,19 +21,114 @@ from config import SAMPLE_DOCS_DIR
 from backend import db
 from backend.document_loader import load_pdf, chunk_pages
 from backend.vectorstore import get_or_build_vectorstore
-from backend.summarizer import summarise_notes
+from backend.summarizer import summarise_notes, SummarizationError
 from backend.quiz import generate_quiz
-from backend.chat import build_chat_chain, chat, reset_session
-from backend.flashcards import generate_flashcards, sm2_update
+from backend.chat import build_chat_chain, chat, chat_stream, reset_session
+from backend.flashcards import generate_flashcards, sm2_update, FlashcardGenerationError
 
 db.init_db()
 
-# ─── PAGE CONFIG ──────────────────────────────────────────────────────────
-st.set_page_config(page_title="Study Assistant", page_icon="🎓", layout="wide")
+# --- PAGE CONFIG ------------------------------------------------------
+st.set_page_config(page_title="Study Assistant", page_icon="📓", layout="wide")
 
-# ─── SOURCE-ON-DEMAND HELPERS ──────────────────────────────────────────────
-# Sources are no longer attached to every answer automatically. They are
-# only surfaced when the user's message signals they actually want them.
+# --- GLOBAL CSS -----------------------------------------------------------
+# No .streamlit/config.toml theme is used, so the native Light/Dark toggle
+# in Settings stays available. Accent color is forced purely via CSS.
+st.markdown("""
+<style>
+:root { --accent: #8B5CF6; }
+
+/* Primary buttons */
+button[kind="primary"] {
+    background-color: var(--accent) !important;
+    border-color: var(--accent) !important;
+}
+button[kind="primary"]:hover {
+    background-color: #7C4DEF !important;
+    border-color: #7C4DEF !important;
+}
+
+/* Radio button selected dot */
+div[data-testid="stRadio"] label div[data-baseweb="radio"] div:first-child {
+    border-color: var(--accent) !important;
+}
+div[data-testid="stRadio"] label div[data-baseweb="radio"] div:first-child > div {
+    background-color: var(--accent) !important;
+}
+
+/* Slider track + handle */
+div[data-testid="stSlider"] [role="slider"] {
+    background-color: var(--accent) !important;
+    border-color: var(--accent) !important;
+}
+div[data-testid="stSlider"] div[data-baseweb="slider"] > div > div {
+    background-color: var(--accent) !important;
+}
+
+/* Selectbox / dropdown focus border */
+div[data-baseweb="select"] > div:focus-within {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 1px var(--accent) !important;
+}
+
+/* Checkbox */
+div[data-testid="stCheckbox"] label div[data-baseweb="checkbox"] div:first-child {
+    border-color: var(--accent) !important;
+}
+input[type="checkbox"]:checked ~ div {
+    background-color: var(--accent) !important;
+    border-color: var(--accent) !important;
+}
+
+/* Links */
+a { color: var(--accent) !important; }
+
+/* Chat input focus border -- strip every nested border/shadow first,
+   then apply a single purple ring on the outer container only */
+div[data-testid="stChatInput"],
+div[data-testid="stChatInput"] * {
+    border-color: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+div[data-testid="stChatInput"]:focus-within {
+    border: 1px solid var(--accent) !important;
+    box-shadow: 0 0 0 1px var(--accent) !important;
+}
+
+/* Chat message avatar background */
+div[data-testid="stChatMessageAvatarUser"],
+div[data-testid="stChatMessageAvatarAssistant"] {
+    background-color: var(--accent) !important;
+}
+
+.feature-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 12px;
+    padding: 20px 18px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+}
+.feature-card .icon-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.feature-card p {
+    margin: 0;
+    color: rgba(255,255,255,0.65);
+    font-size: 0.92rem;
+    line-height: 1.45;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# --- SOURCE-ON-DEMAND HELPERS ------------------------------------------
 SOURCE_TRIGGER_WORDS = [
     "source", "sources", "citation", "citations", "cite", "cited",
     "which page", "what page", "page number", "reference", "references",
@@ -48,7 +143,7 @@ def wants_sources(text: str) -> bool:
     return any(w in t for w in SOURCE_TRIGGER_WORDS)
 
 
-# ─── SESSION STATE ────────────────────────────────────────────────────────
+# --- SESSION STATE -------------------------------------------------------
 defaults = {
     "session_id": str(uuid.uuid4()),
     "doc_name": None,
@@ -62,7 +157,7 @@ defaults = {
     "quiz_submitted": False,
     "chat_chain": None,
     "messages": [],
-    "last_sources": [],       # sources for the most recent answer (kept in memory)
+    "last_sources": [],
     "flashcards": [],
     "flashcard_idx": 0,
     "flashcard_show_answer": False,
@@ -80,10 +175,10 @@ def reset_for_new_doc():
     reset_session(st.session_state.session_id)
 
 
-# ─── SIDEBAR ──────────────────────────────────────────────────────────────
+# --- SIDEBAR --------------------------------------------------------------
 with st.sidebar:
-    st.header("🎓 Study Assistant")
-    st.caption("Upload your notes or any PDF to get started.")
+    st.header("📓 Study Assistant")
+    st.write("Upload your notes or any PDF to get started.")
     st.divider()
 
     uploaded = st.file_uploader("📂 Upload PDF notes", type=["pdf"])
@@ -93,10 +188,15 @@ with st.sidebar:
             tmp.write(uploaded.read())
             tmp_path = tmp.name
 
-        with st.spinner("🔍 Indexing your notes..."):
-            pages, full_text, doc_id = load_pdf(tmp_path)
-            chunks = chunk_pages(pages)
-            vector_store = get_or_build_vectorstore(doc_id, chunks)
+        try:
+            with st.spinner("🔍 Indexing your notes..."):
+                pages, full_text, doc_id = load_pdf(tmp_path)
+                chunks = chunk_pages(pages)
+                vector_store = get_or_build_vectorstore(doc_id, chunks)
+        except (FileNotFoundError, ValueError) as e:
+            st.error(f"Couldn't process this PDF: {e}")
+            os.unlink(tmp_path)
+            st.stop()
         os.unlink(tmp_path)
 
         reset_for_new_doc()
@@ -120,38 +220,60 @@ with st.sidebar:
     st.divider()
     st.caption("LangChain · ChromaDB · Groq · Streamlit")
 
-# ─── MAIN ─────────────────────────────────────────────────────────────────
-st.title("🎓 Study Assistant")
-st.caption("Summarise notes · Generate quizzes · Flashcards · Chat with memory")
+# --- MAIN ------------------------------------------------------------------
+st.title("📓 Study Assistant")
+st.subheader("Summarise notes · Generate quizzes · Flashcards · Chat with memory", anchor=False)
 st.divider()
 
 if st.session_state.doc_name is None:
-    c1, c2, c3, c4 = st.columns(4)
-    with c1:
-        st.markdown("### 📝 Summarise\nA structured summary with key concepts, terms, and takeaways.")
-    with c2:
-        st.markdown("### 🧠 Quiz\nAuto-generated MCQs to test your understanding.")
-    with c3:
-        st.markdown("### 🗂️ Flashcards\nSpaced-repetition flashcards that adapt to what you know.")
-    with c4:
-        st.markdown("### 💬 Chat\nAsk follow-up questions — it remembers the conversation.")
+    features = [
+        ("📝", "Summarise", "A structured summary with key concepts, terms, and takeaways."),
+        ("🧠", "Quiz", "Auto-generated MCQs to test your understanding."),
+        ("🗂️", "Flashcards", "Spaced-repetition flashcards that adapt to what you know."),
+        ("💬", "Chat", "Ask follow-up questions — it remembers the conversation."),
+    ]
+    cols = st.columns(4, gap="medium")
+    for col, (icon, title, desc) in zip(cols, features):
+        with col:
+            st.markdown(
+                f"""<div class="feature-card">
+                    <div class="icon-title">{icon} {title}</div>
+                    <p>{desc}</p>
+                </div>""",
+                unsafe_allow_html=True,
+            )
+    st.write("")
     st.info("👈 Upload a PDF from the sidebar to get started.")
     st.stop()
 
-tab1, tab2, tab3, tab4 = st.tabs(["📝 Summarise", "🧠 Quiz", "🗂️ Flashcards", "💬 Chat"])
+TAB_OPTIONS = ["📝 Summarise", "🧠 Quiz", "🗂️ Flashcards", "💬 Chat"]
+if "active_tab" not in st.session_state:
+    st.session_state.active_tab = TAB_OPTIONS[0]
 
-# ═══════════════════════════════════════════════════════════════════════
-# TAB 1 — SUMMARISE
-# ═══════════════════════════════════════════════════════════════════════
-with tab1:
-    st.subheader("📝 Notes Summary")
+st.session_state.active_tab = st.radio(
+    "Section",
+    TAB_OPTIONS,
+    horizontal=True,
+    label_visibility="collapsed",
+    key="tab_selector",
+)
+active = st.session_state.active_tab
+
+# =========================================================================
+# TAB 1 -- SUMMARISE
+# =========================================================================
+if active == "📝 Summarise":
+    st.subheader("📝 Notes Summary", anchor=False)
 
     if st.session_state.summary is None:
         st.info("Click below to generate a structured summary of your notes.")
         if st.button("✨ Generate Summary", use_container_width=True, key="gen_summary"):
-            with st.spinner("Reading your notes and summarising..."):
-                st.session_state.summary = summarise_notes(st.session_state.full_text)
-            st.rerun()
+            try:
+                with st.spinner("Reading your notes and summarising..."):
+                    st.session_state.summary = summarise_notes(st.session_state.full_text)
+                st.rerun()
+            except SummarizationError as e:
+                st.error(str(e))
     else:
         col1, col2 = st.columns([5, 1])
         with col2:
@@ -168,11 +290,11 @@ with tab1:
             use_container_width=True,
         )
 
-# ═══════════════════════════════════════════════════════════════════════
-# TAB 2 — QUIZ
-# ═══════════════════════════════════════════════════════════════════════
-with tab2:
-    st.subheader("🧠 Quiz Generator")
+# =========================================================================
+# TAB 2 -- QUIZ
+# =========================================================================
+elif active == "🧠 Quiz":
+    st.subheader("🧠 Quiz Generator", anchor=False)
 
     if not st.session_state.quiz:
         st.info("Generate MCQ questions from your notes.")
@@ -191,7 +313,7 @@ with tab2:
                 st.session_state.quiz_submitted = False
                 st.rerun()
             else:
-                st.error("Quiz generation failed — try again.")
+                st.error("Quiz generation failed -- try again.")
 
     elif not st.session_state.quiz_submitted:
         questions = st.session_state.quiz
@@ -216,7 +338,7 @@ with tab2:
                     1 for i, q in enumerate(questions)
                     if st.session_state.quiz_answers.get(i) == q["answer"]
                 )
-                db.save_quiz_result(st.session_state.doc_name, correct, len(questions))
+                db.save_quiz_result(st.session_state.doc_id, correct, len(questions))
                 st.rerun()
 
     else:
@@ -235,7 +357,7 @@ with tab2:
         else:
             emoji, color = "📖", "red"
 
-        st.markdown(f"### {emoji} :{color}[{correct_count}/{total} correct — {pct}%]")
+        st.subheader(f"{emoji} :{color}[{correct_count}/{total} correct -- {pct}%]", anchor=False)
 
         for i, q in enumerate(questions):
             user_ans = st.session_state.quiz_answers.get(i, "")
@@ -267,44 +389,48 @@ with tab2:
                 st.session_state.quiz_submitted = False
                 st.rerun()
 
-        history = db.get_quiz_history(st.session_state.doc_name)
+        history = db.get_quiz_history(st.session_state.doc_id)
         if len(history) > 1:
             st.divider()
-            st.caption("📈 Your progress on this document")
+            st.subheader("📈 Your progress on this document", anchor=False)
             scores = [h["score"] / h["total"] * 100 for h in history]
             st.line_chart(scores)
 
-# ═══════════════════════════════════════════════════════════════════════
-# TAB 3 — FLASHCARDS
-# ═══════════════════════════════════════════════════════════════════════
-with tab3:
-    st.subheader("🗂️ Flashcards")
+# =========================================================================
+# TAB 3 -- FLASHCARDS
+# =========================================================================
+elif active == "🗂️ Flashcards":
+    st.subheader("🗂️ Flashcards", anchor=False)
 
-    existing = db.get_all_flashcards(st.session_state.doc_name)
+    existing = db.get_all_flashcards(st.session_state.doc_id)
 
     if not existing:
         st.info("Generate flashcards from your notes. Reviews are scheduled with "
-                 "spaced repetition (SM-2) — cards you know well appear less often.")
+                 "spaced repetition (SM-2) -- cards you know well appear less often.")
         num_cards = st.slider("Number of flashcards", 5, 20, 10, key="num_cards")
         if st.button("🗂️ Generate Flashcards", use_container_width=True, key="gen_cards"):
-            with st.spinner("Creating flashcards..."):
-                cards = generate_flashcards(st.session_state.full_text, num_cards)
-            if cards:
-                db.add_flashcards(st.session_state.doc_name, cards)
-                st.rerun()
-            else:
-                st.error("Flashcard generation failed — try again.")
+            try:
+                with st.spinner("Creating flashcards..."):
+                    cards = generate_flashcards(st.session_state.full_text, num_cards)
+                if cards:
+                    db.add_flashcards(st.session_state.doc_id, cards)
+                    st.rerun()
+                else:
+                    st.error("Flashcard generation failed -- try again.")
+            except FlashcardGenerationError as e:
+                st.error(str(e))
     else:
-        due = db.get_due_flashcards(st.session_state.doc_name)
-        st.caption(f"{len(due)} of {len(existing)} cards due for review")
+        due = db.get_due_flashcards(st.session_state.doc_id)
+        st.write(f"**{len(due)}** of **{len(existing)}** cards due for review")
 
         if not due:
-            st.success("🎉 No cards due right now — check back later!")
+            st.success("🎉 No cards due right now -- check back later!")
         else:
             idx = st.session_state.flashcard_idx % len(due)
             card = due[idx]
 
             st.markdown(f"**Card {idx + 1} of {len(due)}**")
+
             with st.container(border=True):
                 st.markdown(f"### {card['question']}")
                 if st.session_state.flashcard_show_answer:
@@ -316,7 +442,7 @@ with tab3:
                     st.session_state.flashcard_show_answer = True
                     st.rerun()
             else:
-                st.caption("How well did you know this?")
+                st.write("How well did you know this?")
                 cols = st.columns(4)
                 labels = [("Again", 1), ("Hard", 3), ("Good", 4), ("Easy", 5)]
                 for col, (label, quality) in zip(cols, labels):
@@ -332,25 +458,28 @@ with tab3:
 
         st.divider()
         if st.button("🆕 Add More Flashcards", key="more_cards"):
-            with st.spinner("Creating flashcards..."):
-                cards = generate_flashcards(
-                    st.session_state.full_text,
-                    10,
-                    existing_questions=[c["question"] for c in existing],
-                )
-            if cards:
-                db.add_flashcards(st.session_state.doc_name, cards)
-                st.rerun()
-            else:
-                st.error("Flashcard generation failed — try again.")
-# ═══════════════════════════════════════════════════════════════════════
-# TAB 4 — CHAT WITH MEMORY
-# ═══════════════════════════════════════════════════════════════════════
-with tab4:
-    st.subheader("💬 Chat with your Notes")
-    st.caption(
-        "Ask anything. Follow-up questions work — the assistant remembers context. "
-        "Sources aren't shown automatically — just ask e.g. *\"what's the source?\"* "
+            try:
+                with st.spinner("Creating flashcards..."):
+                    cards = generate_flashcards(
+                        st.session_state.full_text,
+                        10,
+                        existing_questions=[c["question"] for c in existing],
+                    )
+                if cards:
+                    db.add_flashcards(st.session_state.doc_id, cards)
+                    st.rerun()
+                else:
+                    st.error("Flashcard generation failed -- try again.")
+            except FlashcardGenerationError as e:
+                st.error(str(e))
+# =========================================================================
+# TAB 4 -- CHAT WITH MEMORY
+# =========================================================================
+elif active == "💬 Chat":
+    st.subheader("💬 Chat with your Notes", anchor=False)
+    st.write(
+        "Ask anything. Follow-up questions work -- the assistant remembers context. "
+        "Sources aren't shown automatically -- just ask e.g. *\"what's the source?\"* "
         "or *\"which page is that from?\"* whenever you want them."
     )
 
@@ -358,23 +487,23 @@ with tab4:
         st.info("Start a conversation using the chat box at the bottom of the page.")
 
     for msg in st.session_state.messages:
-        with st.chat_message(msg["role"]):
+        avatar = "🧑" if msg["role"] == "user" else "🤖"
+        with st.chat_message(msg["role"], avatar=avatar):
             st.markdown(msg["content"])
 
-            # Only render the sources expander for turns where the user
-            # actually asked for sources (flagged as show_sources=True).
             if msg["role"] == "assistant" and msg.get("show_sources") and msg.get("sources"):
                 with st.expander("📄 Sources"):
                     for page in msg["sources"]:
                         st.caption(f"Page {page}")
 
 
-# ═══════════════════════════════════════════════════════════════════════
+# =========================================================================
 # GLOBAL CHAT INPUT
-# Must stay outside st.tabs()
-# ═══════════════════════════════════════════════════════════════════════
+# Must stay outside the tab logic above (chat_input always pins to the
+# bottom of the page regardless of where it's called from).
+# =========================================================================
 
-if st.session_state.doc_name:
+if st.session_state.doc_name and active == "💬 Chat":
 
     question = st.chat_input("💬 Ask something about your notes...")
 
@@ -388,14 +517,12 @@ if st.session_state.doc_name:
         )
 
         if wants_sources(question):
-            # The user is asking for sources for the last answer — don't
-            # burn an LLM call, just surface what we already fetched.
             if st.session_state.last_sources:
                 pages_str = ", ".join(f"page {p}" for p in st.session_state.last_sources)
                 answer_text = f"Here's where my last answer came from: {pages_str}."
             else:
                 answer_text = (
-                    "I don't have any sources yet — ask me something about "
+                    "I don't have any sources yet -- ask me something about "
                     "your notes first, then I can tell you where it came from."
                 )
 
@@ -409,22 +536,27 @@ if st.session_state.doc_name:
             )
 
         else:
-            with st.spinner("Thinking..."):
-                result = chat(
-                    st.session_state.chat_chain,
-                    question,
-                    st.session_state.session_id,
+            sources_holder = {}
+
+            with st.chat_message("assistant", avatar="🤖"):
+                full_response = st.write_stream(
+                    chat_stream(
+                        st.session_state.chat_chain,
+                        question,
+                        st.session_state.session_id,
+                        sources_holder,
+                    )
                 )
 
-            # Remember these sources in case the user asks for them next turn.
-            st.session_state.last_sources = result["sources"]
+            pages = sources_holder.get("pages", [])
+            st.session_state.last_sources = pages
 
             st.session_state.messages.append(
                 {
                     "role": "assistant",
-                    "content": result["answer"],
-                    "sources": result["sources"],
-                    "show_sources": False,  # not shown unless asked
+                    "content": full_response,
+                    "sources": pages,
+                    "show_sources": False,
                 }
             )
 

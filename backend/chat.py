@@ -28,9 +28,8 @@ from langchain.chains.combine_documents import (
 from backend.models import get_llm
 from config import RETRIEVAL_K
 
-# ---------------------------------------------------------------------
 # Retrieval tuning
-# ---------------------------------------------------------------------
+
 # 0.70 cosine similarity is unrealistically strict for most embedding
 # models — genuinely relevant chunks commonly score 0.3-0.55, especially
 # once the history-aware retriever rewrites the question. A cutoff that
@@ -40,9 +39,8 @@ from config import RETRIEVAL_K
 # model if needed.
 SCORE_THRESHOLD = 0.35
 
-# ---------------------------------------------------------------------
+
 # In-memory chat history
-# ---------------------------------------------------------------------
 
 _session_store: dict[str, InMemoryChatMessageHistory] = {}
 
@@ -55,9 +53,9 @@ def _get_session_history(session_id: str) -> InMemoryChatMessageHistory:
     return _session_store[session_id]
 
 
-# ---------------------------------------------------------------------
+
 # Prompt for rewriting follow-up questions
-# ---------------------------------------------------------------------
+
 
 CONDENSE_PROMPT = ChatPromptTemplate.from_messages(
     [
@@ -77,9 +75,8 @@ Return ONLY the rewritten question.
     ]
 )
 
-# ---------------------------------------------------------------------
+
 # Prompt for answering
-# ---------------------------------------------------------------------
 
 ANSWER_PROMPT = ChatPromptTemplate.from_messages(
     [
@@ -110,18 +107,11 @@ Context:
     ]
 )
 
-
-# ---------------------------------------------------------------------
-# Build chain
-# ---------------------------------------------------------------------
-
 def build_chat_chain(vector_store):
     """Create the RAG pipeline."""
 
     llm = get_llm()
 
-    # Primary retriever: filtered by similarity score so obviously
-    # irrelevant chunks get excluded.
     strict_retriever = vector_store.as_retriever(
         search_type="similarity_score_threshold",
         search_kwargs={
@@ -130,11 +120,6 @@ def build_chat_chain(vector_store):
         },
     )
 
-    # Fallback retriever: plain top-k similarity, no threshold. Used only
-    # when the strict retriever returns nothing, so a real question never
-    # gets dropped just because every chunk scored slightly under the
-    # cutoff. The LLM's ANSWER_PROMPT still decides whether the retrieved
-    # context actually answers the question.
     fallback_retriever = vector_store.as_retriever(
         search_type="similarity",
         search_kwargs={"k": RETRIEVAL_K},
@@ -173,11 +158,6 @@ def build_chat_chain(vector_store):
     )
 
     return chain
-
-
-# ---------------------------------------------------------------------
-# Chat API
-# ---------------------------------------------------------------------
 
 def chat(
     chain,
@@ -225,6 +205,64 @@ def chat(
         "answer": result["answer"],
         "sources": pages,
     }
+
+
+# ---------------------------------------------------------------------
+# Chat API — streaming version
+# ---------------------------------------------------------------------
+
+def chat_stream(
+    chain,
+    question: str,
+    session_id: str = "default",
+    sources_holder: dict | None = None,
+):
+    """
+    Ask a question, yielding the answer text chunk-by-chunk for use
+    with st.write_stream.
+
+    `chain.stream()` yields a sequence of partial dicts: early chunks
+    carry the retrieved `context`, later chunks carry pieces of the
+    `answer`. We capture the context/pages as a side effect into
+    `sources_holder` (a plain dict passed in by the caller), since
+    st.write_stream only wants a generator of strings — the sources
+    have to be smuggled out separately, not returned directly.
+
+    Usage
+    -----
+    sources_holder = {}
+    full_text = st.write_stream(
+        chat_stream(chain, question, session_id, sources_holder)
+    )
+    pages = sources_holder["pages"]
+    """
+
+    if sources_holder is None:
+        sources_holder = {}
+
+    seen = set()
+    pages: list[int] = []
+    sources_holder["pages"] = pages
+
+    for chunk in chain.stream(
+        {"input": question},
+        config={
+            "configurable": {
+                "session_id": session_id,
+            }
+        },
+    ):
+        if "context" in chunk:
+            for doc in chunk["context"]:
+                page = doc.metadata.get("page")
+                if page is not None and page not in seen:
+                    seen.add(page)
+                    pages.append(page)
+
+        if "answer" in chunk:
+            yield chunk["answer"]
+
+    pages.sort()
 
 
 # ---------------------------------------------------------------------

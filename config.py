@@ -75,3 +75,4 @@ def get_groq_api_key() -> str:
         pass
 
     return os.getenv("GROQ_API_KEY", "")
+
