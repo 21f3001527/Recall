@@ -1,0 +1,16 @@
+{
+  "doc": "Numpy Notes.pdf",
+  "note": "Edit this topic list to match the actual sections/headings in your sample doc. It is used only for a coverage sanity-check (are the generated flashcards touching all major topics, or clustering on one section?), not for scoring individual card quality.",
+  "topics": [
+    "ndarray creation and basic attributes (shape, dtype, ndim)",
+    "array indexing and slicing",
+    "broadcasting rules",
+    "reshaping and flattening arrays",
+    "aggregation functions (sum, mean, min, max, std)",
+    "vectorized operations vs loops",
+    "boolean/fancy indexing and masking",
+    "linear algebra operations (dot, matmul, transpose)",
+    "random number generation",
+    "stacking and splitting arrays"
+  ]
+}

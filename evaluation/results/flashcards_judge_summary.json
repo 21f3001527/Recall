@@ -1,0 +1,29 @@
+{
+  "num_cards_total": 15,
+  "num_cards_judged": 15,
+  "num_cards_failed_to_judge": 0,
+  "average_scores": {
+    "faithfulness": 5.0,
+    "clarity": 5.0,
+    "correctness": 5.0,
+    "appropriate_scope": 5.0
+  },
+  "topic_coverage": {
+    "total_topics": 10,
+    "covered_count": 10,
+    "coverage_pct": 100.0,
+    "covered_topics": [
+      "ndarray creation and basic attributes (shape, dtype, ndim)",
+      "array indexing and slicing",
+      "broadcasting rules",
+      "reshaping and flattening arrays",
+      "aggregation functions (sum, mean, min, max, std)",
+      "vectorized operations vs loops",
+      "boolean/fancy indexing and masking",
+      "linear algebra operations (dot, matmul, transpose)",
+      "random number generation",
+      "stacking and splitting arrays"
+    ],
+    "missing_topics": []
+  }
+}

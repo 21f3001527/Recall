@@ -1,0 +1,68 @@
+{
+  "doc": "Numpy Notes.pdf",
+  "num_cards_requested": 15,
+  "num_cards_generated": 15,
+  "generation_time_seconds": 3.84,
+  "cards": [
+    {
+      "question": "What is NumPy?",
+      "answer": "NumPy (Numerical Python) is an open-source Python library used for numerical computations, scientific computing, data analysis, and Machine Learning / Deep Learning."
+    },
+    {
+      "question": "What is the difference between a Python list and a NumPy array?",
+      "answer": "NumPy arrays are faster for numerical operations, consume less memory, and support vectorized operations (no explicit loops needed)."
+    },
+    {
+      "question": "What is the purpose of the 'ndarray' in NumPy?",
+      "answer": "An ndarray is a multidimensional array that can represent data in one, two, three, or more dimensions."
+    },
+    {
+      "question": "What is the difference between 'shape' and 'size' in NumPy arrays?",
+      "answer": "Shape refers to the dimensions of the array (rows, columns, ...), while size refers to the total number of elements in the array."
+    },
+    {
+      "question": "What is Broadcasting in NumPy?",
+      "answer": "A mechanism that lets NumPy perform arithmetic on arrays of different shapes by virtually 'stretching' the smaller array to match the larger array's shape."
+    },
+    {
+      "question": "What is the difference between 'copy()' and 'view()' in NumPy?",
+      "answer": "view() shares the same underlying memory as the original array, while copy() allocates a completely new, independent memory block."
+    },
+    {
+      "question": "Why is NumPy faster than plain Python?",
+      "answer": "It uses an optimized C implementation internally and stores array elements in contiguous memory blocks, which is cache-friendly."
+    },
+    {
+      "question": "What is the purpose of the 'random' module in NumPy?",
+      "answer": "The 'random' module provides functions for generating random numbers, shuffling arrays, and creating permutations."
+    },
+    {
+      "question": "What is the difference between 'slicing' and 'fancy indexing' in NumPy?",
+      "answer": "Slicing uses a start:stop:step range and returns a view, while fancy indexing uses an explicit list of indices and returns a copy."
+    },
+    {
+      "question": "How do you save and load NumPy arrays to/from files?",
+      "answer": "You can use the 'save()' and 'load()' functions for binary .npy files, or 'savetxt()' and 'loadtxt()' for text/csv files."
+    },
+    {
+      "question": "What is the purpose of the 'ufuncs' in NumPy?",
+      "answer": "ufuncs (Universal Functions) are implemented in compiled C loops, providing a speed advantage by avoiding Python-level loops entirely."
+    },
+    {
+      "question": "What is the difference between 'np.save()' and 'np.savez()'?",
+      "answer": "np.save() saves a single array to a .npy file, while np.savez() saves multiple arrays to a .npz file."
+    },
+    {
+      "question": "How do you generate a random permutation of an array in NumPy?",
+      "answer": "You can use the 'np.random.permutation()' function."
+    },
+    {
+      "question": "What is the purpose of the 'seed' function in NumPy's 'random' module?",
+      "answer": "Setting a seed makes 'random' results reproducible, essential for debugging ML experiments and sharing results."
+    },
+    {
+      "question": "What is the difference between '.npy' and '.csv' files in NumPy?",
+      "answer": ".npy files preserve exact dtype and shape and load faster, while .csv files are human-readable and portable across tools like Excel or Pandas."
+    }
+  ]
+}
