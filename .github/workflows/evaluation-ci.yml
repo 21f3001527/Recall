@@ -1,0 +1,29 @@
+name: Evaluation Regression Tests
+
+# TEST VERSION -- only the quiz sanity check is wired up for now, to
+# confirm the pass/fail gate works correctly in GitHub Actions before
+# adding chat, flashcards, and summary.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  sanity-checks:
+    name: Free structural sanity checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Analyze quiz evaluation results
+        run: uv run python -m evaluation.analyze_quiz_results
