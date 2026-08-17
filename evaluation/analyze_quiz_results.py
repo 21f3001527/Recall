@@ -30,6 +30,24 @@ EXPECTED_NUM_OPTIONS = 4
 
 OPTION_PREFIX_RE = re.compile(r"^([A-D])\)\s*")
 
+# Issues containing any of these substrings are structural defects that
+# should fail a CI check. Near-duplicates and generation shortfalls are
+# expected/documented behavior (see README), not defects, so they're
+# reported but don't fail the build.
+CRITICAL_ISSUE_MARKERS = [
+    "empty question text",
+    "expected 4 options",
+    "missing 'X) ' prefix",
+    "has empty text",
+    "is not one of A/B/C/D",
+    "no corresponding option",
+    "do not match expected",
+]
+
+
+def is_critical_issue(issue: str) -> bool:
+    return any(marker in issue for marker in CRITICAL_ISSUE_MARKERS)
+
 
 def similarity(a: str, b: str) -> float:
     return SequenceMatcher(None, a.strip().lower(), b.strip().lower()).ratio()
@@ -106,14 +124,22 @@ def check_question(index: int, q: dict) -> list[str]:
     return issues
 
 
-def main() -> None:
+def main() -> bool:
+    """Returns True if no critical (build-breaking) issues were found,
+    False otherwise. Near-duplicates and generation shortfalls are
+    reported but do not fail the check -- they're expected/documented
+    behavior, not structural defects.
+    """
     if not RESULTS_PATH.exists():
-        raise FileNotFoundError(
-            f"Quiz results not found: {RESULTS_PATH}. Run evaluate_quiz first."
-        )
+        logger.error("Quiz results not found: %s. Run evaluate_quiz first.", RESULTS_PATH)
+        return False
 
-    with open(RESULTS_PATH, "r", encoding="utf-8") as f:
-        data = json.load(f)
+    try:
+        with open(RESULTS_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception as e:
+        logger.error("Failed to read %s: %s", RESULTS_PATH, e)
+        return False
 
     questions = data.get("questions", [])
     num_requested = data.get("num_questions_requested", len(questions))
@@ -185,13 +211,41 @@ def main() -> None:
 
     if num_generated < num_requested:
         logger.warning(
-            "Generated fewer questions than requested (%d/%d).",
+            "Generated fewer questions than requested (%d/%d). This is expected "
+            "once the source document runs out of distinct content and is not "
+            "treated as a failure.",
             num_generated,
             num_requested,
         )
 
-    logger.info("Sanity check complete. No API calls were made.")
+    # ---------------------------------------------------------
+    # Pass/fail determination
+    # ---------------------------------------------------------
+    critical_issue_count = sum(
+        1
+        for issues in per_question_issues.values()
+        for issue in issues
+        if is_critical_issue(issue)
+    )
+
+    if num_generated == 0:
+        logger.error("No questions were generated. Failing check.")
+        logger.info("Sanity check complete (FAILED). No API calls were made.")
+        return False
+
+    if critical_issue_count > 0:
+        logger.error(
+            "%d critical structural issue(s) found across %d question(s). Failing check.",
+            critical_issue_count,
+            len(per_question_issues),
+        )
+        logger.info("Sanity check complete (FAILED). No API calls were made.")
+        return False
+
+    logger.info("Sanity check complete (PASSED). No API calls were made.")
+    return True
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    sys.exit(0 if main() else 1)
