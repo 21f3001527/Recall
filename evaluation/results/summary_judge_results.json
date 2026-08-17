@@ -1,0 +1,11 @@
+[
+  {
+    "doc": "Numpy Notes.pdf",
+    "faithfulness": 5,
+    "coverage": 5,
+    "conciseness": 4,
+    "coherence": 5,
+    "notes": "The summary is very faithful to the source document, capturing all the main topics and concepts. It is well-organized and clear to follow. However, it could be more concise by removing some of the repetitive phrases and focusing on the key points. Overall, it is an excellent summary.",
+    "status": "success"
+  }
+]

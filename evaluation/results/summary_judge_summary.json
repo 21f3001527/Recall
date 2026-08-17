@@ -1,0 +1,30 @@
+{
+  "doc": "Numpy Notes.pdf",
+  "model": "llama-3.1-8b-instant",
+  "status": "success",
+  "scores": {
+    "faithfulness": 5,
+    "coverage": 5,
+    "conciseness": 4,
+    "coherence": 5
+  },
+  "topic_coverage": {
+    "total_topics": 10,
+    "covered_count": 7,
+    "coverage_pct": 70.0,
+    "covered_topics": [
+      "ndarray creation and basic attributes",
+      "array indexing and slicing",
+      "broadcasting rules",
+      "aggregation functions",
+      "vectorized operations",
+      "linear algebra operations",
+      "random number generation"
+    ],
+    "missing_topics": [
+      "reshaping and flattening arrays",
+      "boolean/fancy indexing and masking",
+      "stacking and splitting arrays"
+    ]
+  }
+}

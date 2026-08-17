@@ -14,7 +14,7 @@ Built with **LangChain**, **ChromaDB**, **Groq**, **HuggingFace Embeddings**, an
 - **💬 Chat** — history-aware RAG chat, grounded in the document, with source page references.
 - **⚡ Persistent vectors** — documents embedded once and stored in ChromaDB; re-uploads reuse the index.
 - **💾 Persistent study data** — quiz history and flashcard scheduling stored in SQLite.
-- **📊 Evaluation framework** — automated evaluation for the Chat/RAG, Flashcard, and Quiz pipelines.
+- **📊 Evaluation framework** — automated evaluation for the Chat/RAG, Flashcard, Quiz, and Summary pipelines.
 
 ---
 
@@ -56,16 +56,20 @@ study_assistant/
 │   ├── analyze_chat_results.py
 │   ├── analyze_flashcards_results.py
 │   ├── analyze_quiz_results.py
+│   ├── analyze_summary_results.py
 │   ├── evaluate_chat.py
 │   ├── evaluate_flashcards.py
 │   ├── evaluate_quiz.py
+│   ├── evaluate_summary.py
 │   ├── judge_flashcards.py
 │   ├── judge_quiz.py
+│   ├── judge_summary.py
 │   ├── ragas_eval_chat.py
 │   ├── dataset/
 │   │   ├── chat_eval.json
 │   │   ├── flashcards_eval.json
-│   │   └── quiz_eval.json
+│   │   ├── quiz_eval.json
+│   │   └── summary_eval.json
 │   └── results/
 │       ├── chat_results.json
 │       ├── chat_ragas_results.json
@@ -75,7 +79,10 @@ study_assistant/
 │       ├── flashcards_judge_summary.json
 │       ├── quiz_results.json
 │       ├── quiz_judge_results.json
-│       └── quiz_judge_summary.json
+│       ├── quiz_judge_summary.json
+│       ├── summary_results.json
+│       ├── summary_judge_results.json
+│       └── summary_judge_summary.json
 └── sample_docs/
     └── Numpy Notes.pdf
 ```
@@ -135,7 +142,7 @@ PDF Upload → PDF Loading → Chunking → HuggingFace Embeddings → ChromaDB
 
 ## 📊 Evaluation
 
-Three separate evaluation pipelines exist, each matched to its component's failure modes. Evaluations run against the **actual production functions**, not duplicated logic.
+Four separate evaluation pipelines exist, each matched to its component's failure modes. Evaluations run against the **actual production functions**, not duplicated logic.
 
 ### 💬 Chat / RAG Evaluation
 - **Dataset:** `evaluation/dataset/chat_eval.json` — 20 questions on the sample NumPy document.
@@ -251,11 +258,56 @@ Topic coverage: **7/10 (70%)** — missing: broadcasting rules, aggregation func
 
 > As with flashcards, interpret these as the outcome of the current run, not absolute ground truth — re-running with a longer or more topic-dense source document should raise both the unique-question ceiling and topic coverage.
 
+### 📝 Summary Evaluation
+Summarization produces a single structured document, not a list of many items, so the pipeline differs slightly: there's no batching or per-item resumability — just one generation call and one judge call, each defensively wrapped.
+
+**Pipeline:** `evaluate_summary.py` → `summary_results.json` → `analyze_summary_results.py` (structural sanity checks) + `judge_summary.py` (LLM judge + topic coverage) → `summary_judge_results.json` / `summary_judge_summary.json`.
+
+**Dataset:** `evaluation/dataset/summary_eval.json` — same 10-topic checklist used for flashcards and quiz.
+
+**Step 1 — Generation** (runs production `summarise_notes()`, a map-reduce pipeline: one LLM call per document chunk, then one call to combine them into the final structured summary):
+```bash
+uv run python -m evaluation.evaluate_summary
+```
+
+**Step 2 — Free sanity checks** (verifies the 4 required sections — Summary, Key Concepts, Important Terms, Key Takeaways — are present and in order, flags empty sections, checks for near-duplicate bullets via `SequenceMatcher` threshold 0.85, and reports the summary-to-source length ratio):
+```bash
+uv run python -m evaluation.analyze_summary_results
+```
+
+**Step 3 — LLM-as-judge** (1–5 scale on Faithfulness, Coverage, Conciseness, Coherence, plus a topic coverage check):
+```bash
+uv run python -m evaluation.judge_summary
+```
+
+**Current result:**
+
+| Metric | Score |
+|---|---|
+| Faithfulness | 5.0 / 5 |
+| Coverage | 5.0 / 5 |
+| Conciseness | 4.0 / 5 |
+| Coherence | 5.0 / 5 |
+
+- Source: 22,539 characters → Summary: 2,126 characters (ratio 0.094).
+- Free sanity check: all 4 sections present and correctly ordered, 18 total bullets across Key Concepts/Important Terms/Key Takeaways, 0 near-duplicate bullets.
+- Judge notes: faithful and well-organized, but could be more concise — some bullets repeat similar phrasing rather than staying maximally tight, which matches the 4/5 (not 5/5) Conciseness score.
+
+Topic coverage: **7/10 (70%)** — missing per keyword-matching: reshaping/flattening, boolean/fancy indexing, stacking/splitting.
+
+**Findings**
+
+1. **The topic coverage gap is partly a false negative from keyword matching, not an actual content gap.** The generated summary explicitly includes *"Reshaping and transposing: operations for changing the dimensions of an array"* under Key Concepts — but the checklist keyword is `"reshape"`, which is not a substring of `"reshaping"`, so the deterministic check missed it. This is a concrete, reproducible example of why keyword-based coverage is listed as a known limitation (see Future Improvements) rather than a precise measurement — the true content coverage is likely higher than 70%.
+
+2. **Faithfulness and Coherence scored perfectly**, consistent with the map-reduce design's internal retry logic (one transient 429 during generation was retried automatically and didn't affect the final output — no chunks were dropped this run).
+
+> As with flashcards and quiz, interpret these as the outcome of the current run, not absolute ground truth. Re-running `judge_summary` after switching the topic checklist to lemma-aware or semantic matching (see Future Improvements) would likely raise the reported coverage percentage without any change to the summary itself.
+
 ### 📌 Evaluation Philosophy
 - **Chat/RAG:** retrieval evaluation + generation evaluation via RAGAS.
-- **Flashcards & Quiz:** structural sanity checks + LLM-as-judge + topic coverage.
+- **Flashcards, Quiz & Summary:** structural sanity checks + LLM-as-judge + topic coverage.
 
-Each component is evaluated with metrics suited to its actual failure modes rather than one-size-fits-all metrics. Free sanity checks and LLM-as-judge scoring are complementary, not redundant — the quiz evaluation surfaced a case where a structural defect (near-duplicate answer options) was caught by the deterministic check but scored perfectly by the LLM judge.
+Each component is evaluated with metrics suited to its actual failure modes rather than one-size-fits-all metrics. Free sanity checks and LLM-as-judge scoring are complementary, not redundant — the quiz evaluation surfaced a case where a structural defect (near-duplicate answer options) was caught by the deterministic check but scored perfectly by the LLM judge, while the summary evaluation surfaced the reverse pattern: a deterministic check (keyword-based topic coverage) reporting a false negative that the LLM judge's holistic Coverage score (5/5) did not.
 
 ---
 
@@ -287,6 +339,7 @@ Centralized in `config.py`. Store secrets (e.g., `GROQ_API_KEY`) in `.env`, not 
 | Groq 429 during evaluation | Wait for the rate limit to reset and rerun; flashcard and quiz evaluation resume automatically. |
 | Flashcard judge stops partway | Re-run `judge_flashcards`; completed cards are skipped. |
 | Quiz generation stops short of requested count | Expected once the source document runs out of distinct content — near-duplicate filtering rejects rephrased repeats. Re-run `evaluate_quiz` to resume, or accept the lower count as the honest ceiling for that document. |
+| Summary topic coverage looks low despite a good summary | Check whether the missing topic's keyword just doesn't match the summary's actual word form (e.g. "reshape" vs "reshaping") — this is a known keyword-matching limitation, not necessarily a content gap. Read the summary directly to confirm. |
 | Poor retrieval results | Run `analyze_chat_results.py` and inspect retrieved contexts before tuning retrieval params. |
 
 ---
@@ -294,8 +347,7 @@ Centralized in `config.py`. Store secrets (e.g., `GROQ_API_KEY`) in `.env`, not 
 ## 🚧 Future Improvements
 - Regenerate quiz questions against a longer/more topic-dense source document to close the coverage gap (broadcasting, aggregation, stacking/splitting)
 - Tighten `generate_quiz()`'s prompt to enforce 4 semantically distinct distractors per question, closing the gap the free sanity check found
-- Summarization faithfulness & topic coverage evaluation
-- Semantic (vs. keyword) topic coverage
+- Semantic (vs. keyword) topic coverage — the summary evaluation found a concrete false negative ("reshaping" vs. the keyword "reshape") that a lemma-aware or embedding-based match would avoid
 - Human vs. LLM-as-judge comparison
 - Multi-document evaluation
 - Statistical confidence intervals across repeated judge runs
@@ -303,7 +355,7 @@ Centralized in `config.py`. Store secrets (e.g., `GROQ_API_KEY`) in `.env`, not 
 - Automated regression testing in CI/CD
 
 ## 📄 Sample Document
-`sample_docs/Numpy Notes.pdf` — used as the source for the Chat benchmark, Flashcard evaluation, and Quiz evaluation.
+`sample_docs/Numpy Notes.pdf` — used as the source for the Chat benchmark, Flashcard evaluation, Quiz evaluation, and Summary evaluation.
 
 ## 📄 License
 For educational purposes.
