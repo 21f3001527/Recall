@@ -19,9 +19,9 @@ dependencies = [
     "sentence-transformers>=3.0",
     "pypdf>=4.0",
     "pydantic>=2.0",
-    "torch>=2.13.0",
-    "torchvision>=0.28.0",
-    "torchaudio>=2.11.0",
+    "torch==2.11.0",
+    "torchvision==0.26.0",
+    "torchaudio==2.11.0",
     "ragas>=0.4.3",
 ]
 
