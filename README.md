@@ -3,18 +3,18 @@
 # 🎓 Study Assistant
 
 **An AI-powered study workspace that turns PDF notes into summaries, quizzes, flashcards, and a history-aware RAG chat assistant.**
+<div align="center">
 
 [![CI](https://img.shields.io/github/actions/workflow/status/21f3001527/Recall/evaluation-ci.yml?style=for-the-badge&logo=githubactions&logoColor=white&label=CI&color=2EA44F)](https://github.com/21f3001527/Recall/actions/workflows/evaluation-ci.yml)
-[![Stars](https://img.shields.io/github/stars/21f3001527/Recall?style=for-the-badge&logo=github&logoColor=white&color=FFD21E&labelColor=181717)](https://github.com/21f3001527/Recall/stargazers)
-[![Last Commit](https://img.shields.io/github/last-commit/21f3001527/Recall?style=for-the-badge&logo=git&logoColor=white&color=F05032&labelColor=181717)](https://github.com/21f3001527/Recall/commits)
-![License](https://img.shields.io/badge/License-Educational-6B7280?style=for-the-badge&labelColor=181717)
-
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![LangChain](https://img.shields.io/badge/LangChain-Orchestration-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-Framework-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-UI-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
-![Groq](https://img.shields.io/badge/Groq-Inference-F55036?style=for-the-badge&logoColor=white)
+![Groq](https://img.shields.io/badge/Groq-Inference-F55036?style=for-the-badge&logo=lightning&logoColor=white)
 ![ChromaDB](https://img.shields.io/badge/ChromaDB-Vector%20Store-7C3AED?style=for-the-badge&logoColor=white)
 ![uv](https://img.shields.io/badge/uv-Package%20Manager-DE5FE9?style=for-the-badge&logoColor=white)
+![License](https://img.shields.io/badge/License-Educational-6B7280?style=for-the-badge&logoColor=white)
+
+</div>
 
 </div>
 
