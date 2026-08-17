@@ -1,0 +1,334 @@
+[
+  {
+    "question": "What is the purpose of the ndarray in NumPy?",
+    "options": [
+      "A) To represent data in one dimension",
+      "B) To represent data in multiple dimensions",
+      "C) To perform mathematical operations",
+      "D) To store data in a database"
+    ],
+    "answer": "B",
+    "faithfulness": 5,
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 4,
+    "difficulty": 4,
+    "notes": "The question is clear, the answer is correct and supported by the source document. The distractors are plausible but clearly incorrect. The question is reasonably easy, so it's not perfect for 'medium' difficulty."
+  },
+  {
+    "question": "What is the difference between arange() and linspace()?",
+    "options": [
+      "A) arange() takes a step size, while linspace() takes a count of evenly spaced points",
+      "B) arange() takes a count of evenly spaced points, while linspace() takes a step size",
+      "C) arange() is used for 1D arrays, while linspace() is used for 2D arrays",
+      "D) arange() is used for 2D arrays, while linspace() is used for 1D arrays"
+    ],
+    "answer": "A",
+    "faithfulness": 5,
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 4,
+    "difficulty": 4,
+    "notes": "The question is clear, the marked answer is correct and supported by the source document, and the distractors are plausible but incorrect. However, the question may be a bit too easy for a medium difficulty level."
+  },
+  {
+    "question": "What is the purpose of the shape attribute in NumPy?",
+    "options": [
+      "A) To get the total number of elements in an array",
+      "B) To get the dimensions of an array",
+      "C) To get the data type of an array",
+      "D) To get the memory occupied by an array"
+    ],
+    "answer": "B",
+    "faithfulness": null,
+    "correctness": null,
+    "clarity": null,
+    "distractor_quality": null,
+    "difficulty": null,
+    "notes": "JUDGE_ERROR: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01m04taa9ve0tbj694t0z2jrmb` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99906, Requested 9939. Please try again in 2h21m46.08s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+  },
+  {
+    "question": "How do you index a 2D array in NumPy?",
+    "options": [
+      "A) arr[0, 1]",
+      "B) arr[0][1]",
+      "C) arr(0, 1)",
+      "D) arr.get(0, 1)"
+    ],
+    "answer": "A",
+    "faithfulness": null,
+    "correctness": null,
+    "clarity": null,
+    "distractor_quality": null,
+    "difficulty": null,
+    "notes": "JUDGE_ERROR: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01m04taa9ve0tbj694t0z2jrmb` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99906, Requested 10009. Please try again in 2h22m46.559999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+  },
+  {
+    "question": "What is the purpose of the reshape() function in NumPy?",
+    "options": [
+      "A) To change the shape of an array",
+      "B) To change the size of an array",
+      "C) To change the data type of an array",
+      "D) To change the memory occupied by an array"
+    ],
+    "answer": "A",
+    "faithfulness": null,
+    "correctness": null,
+    "clarity": null,
+    "distractor_quality": null,
+    "difficulty": null,
+    "notes": "JUDGE_ERROR: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01m04taa9ve0tbj694t0z2jrmb` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99906, Requested 10015. Please try again in 2h22m51.744s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+  },
+  {
+    "question": "What is the difference between slicing and fancy indexing in NumPy?",
+    "options": [
+      "A) Slicing uses a continuous range and returns a view, while fancy indexing uses a list of specific indices and returns a copy",
+      "B) Slicing uses a list of specific indices and returns a view, while fancy indexing uses a continuous range and returns a copy",
+      "C) Slicing is used for 1D arrays, while fancy indexing is used for 2D arrays",
+      "D) Slicing is used for 2D arrays, while fancy indexing is used for 1D arrays"
+    ],
+    "answer": "A",
+    "faithfulness": null,
+    "correctness": null,
+    "clarity": null,
+    "distractor_quality": null,
+    "difficulty": null,
+    "notes": "JUDGE_ERROR: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01m04taa9ve0tbj694t0z2jrmb` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99906, Requested 10073. Please try again in 2h23m41.856s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+  },
+  {
+    "question": "How do you create a 2D array with zeros in NumPy?",
+    "options": [
+      "A) np.zeros((3, 4))",
+      "B) np.zeros([3, 4])",
+      "C) np.zeros(3, 4)",
+      "D) np.zeros(3, 4)"
+    ],
+    "answer": "A",
+    "faithfulness": null,
+    "correctness": null,
+    "clarity": null,
+    "distractor_quality": null,
+    "difficulty": null,
+    "notes": "JUDGE_ERROR: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01m04taa9ve0tbj694t0z2jrmb` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99905, Requested 10022. Please try again in 2h22m56.928s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+  },
+  {
+    "question": "What is the primary purpose of the NumPy library?",
+    "answer": "A",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. The distractors are plausible but clearly wrong. However, the difficulty level is slightly below medium, as it is a straightforward question from the source material.",
+    "status": "success"
+  },
+  {
+    "question": "What is the difference between using Python lists and NumPy arrays for element-wise operations?",
+    "answer": "B",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. The distractors are plausible but clearly wrong. However, the difficulty level is slightly below medium, as it is a basic concept in NumPy.",
+    "status": "success"
+  },
+  {
+    "question": "What is the function of the 'ndarray' object in NumPy?",
+    "answer": "B",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct according to the source material. The distractors are plausible but clearly wrong, and the question matches the stated difficulty level. However, the difficulty level could be slightly higher to make it more challenging for the user.",
+    "status": "success"
+  },
+  {
+    "question": "How do you create a 1D array in NumPy?",
+    "answer": "A",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct according to the source material. However, the difficulty level is slightly lower than expected, as creating a 1D array is a basic operation in NumPy. The distractors are plausible but clearly wrong, making the question well-crafted.",
+    "status": "success"
+  },
+  {
+    "question": "What is the purpose of the 'shape' attribute in NumPy arrays?",
+    "answer": "B",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. The distractors are plausible but clearly wrong. However, the difficulty level is slightly below medium, as it is a basic concept in NumPy arrays.",
+    "status": "success"
+  },
+  {
+    "question": "What is the difference between 'arange' and 'linspace' functions in NumPy?",
+    "answer": "A",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. However, the difficulty level is slightly lower than expected, as the concept of 'arange' and 'linspace' is introduced in the same section of the NumPy handbook. The distractors are plausible but clearly wrong, making the question well-crafted.",
+    "status": "success"
+  },
+  {
+    "question": "What is the purpose of the 'random' module in NumPy?",
+    "answer": "A",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. The distractors are plausible but clearly wrong. However, the difficulty level is slightly below medium, as it is a straightforward question from the source material.",
+    "status": "success"
+  },
+  {
+    "question": "What is the purpose of the 'indexing' and 'slicing' operations in NumPy arrays?",
+    "answer": "C",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. The distractors are plausible but clearly wrong. The difficulty level is somewhat appropriate, but a more challenging question could be asked at this level.",
+    "status": "success"
+  },
+  {
+    "question": "What is the difference between 'slicing' and 'fancy indexing' in NumPy arrays?",
+    "answer": "A",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. However, the difficulty level is slightly lower than expected, as the concept of slicing and fancy indexing is introduced early in the NumPy documentation. The distractors are plausible but clearly wrong, making the question well-crafted.",
+    "status": "success"
+  },
+  {
+    "question": "What is the difference between NumPy arrays and Python lists?",
+    "answer": "B",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. However, the difficulty level is slightly lower than expected, as the difference between NumPy arrays and Python lists is a fundamental concept in the NumPy documentation. The distractors are plausible but clearly wrong, making the question well-crafted.",
+    "status": "success"
+  },
+  {
+    "question": "What is the purpose of the 'reshape' function in NumPy?",
+    "answer": "A",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. The distractors are plausible but clearly wrong. However, the difficulty level is slightly below medium, as it is a basic concept in NumPy.",
+    "status": "success"
+  },
+  {
+    "question": "What is the name of the powerful object in NumPy that is much faster and more memory-efficient than plain Python lists?",
+    "answer": "A",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. The distractors are plausible but clearly wrong. However, the difficulty level is slightly below medium, as it is a basic concept in NumPy.",
+    "status": "success"
+  },
+  {
+    "question": "What is the function used to create an array filled with zeros in NumPy?",
+    "answer": "A",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. However, the difficulty level is slightly lower than expected, as the correct answer is explicitly mentioned in the source material. The distractors are plausible but clearly wrong, making the question well-crafted.",
+    "status": "success"
+  },
+  {
+    "question": "What is the difference between np.arange() and np.linspace()?",
+    "answer": "A",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. However, the difficulty level is slightly lower than expected, as the difference between np.arange() and np.linspace() is a basic concept in NumPy. The distractors are plausible but clearly wrong, making the question well-crafted.",
+    "status": "success"
+  },
+  {
+    "question": "What is the attribute used to get the shape of an array in NumPy?",
+    "answer": "A",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. The distractors are plausible but clearly wrong. The difficulty level is appropriate for a medium-level question, but it could be slightly more challenging to make it more suitable for the intended difficulty level.",
+    "status": "success"
+  },
+  {
+    "question": "What is the function used to create an identity matrix in NumPy?",
+    "answer": "A",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. The distractors are plausible but clearly wrong. However, the difficulty level is slightly below medium, as it is a straightforward question from the NumPy documentation.",
+    "status": "success"
+  },
+  {
+    "question": "What is the function used to reshape an array in NumPy?",
+    "answer": "A",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. However, the difficulty level is slightly lower than expected, as reshaping an array is a fundamental concept in NumPy. The distractors are plausible but clearly wrong, making the question well-crafted.",
+    "status": "success"
+  },
+  {
+    "question": "What does NumPy stand for?",
+    "answer": "A",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. The distractors are plausible but clearly wrong. However, the difficulty level is slightly below medium, as it is a basic fact about NumPy.",
+    "status": "success"
+  },
+  {
+    "question": "What is the main advantage of using NumPy arrays over Python lists?",
+    "answer": "D",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. The distractors are plausible but clearly wrong. However, the difficulty level is slightly below medium, as it is a basic concept in NumPy.",
+    "status": "success"
+  },
+  {
+    "question": "What is the purpose of the 'ndarray' in NumPy?",
+    "answer": "C",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. The distractors are plausible but clearly wrong. However, the difficulty level is slightly below medium, as it is a relatively straightforward question.",
+    "status": "success"
+  },
+  {
+    "question": "How do you perform 1D indexing in NumPy arrays?",
+    "answer": "B",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. However, the difficulty level is slightly lower than expected, as 1D indexing is a basic concept in NumPy. The distractors are plausible but clearly wrong, making the question well-crafted.",
+    "status": "success"
+  },
+  {
+    "question": "How do you create a copy of a NumPy array?",
+    "answer": "A",
+    "correctness": 5,
+    "clarity": 5,
+    "distractor_quality": 5,
+    "difficulty_appropriateness": 4,
+    "notes": "The question is clear and unambiguous, and the marked answer is correct. The distractors are plausible but clearly wrong. However, the difficulty level is slightly below medium, as it is a basic concept in NumPy.",
+    "status": "success"
+  }
+]

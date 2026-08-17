@@ -1,0 +1,229 @@
+{
+  "doc": "Numpy Notes.pdf",
+  "num_questions_requested": 50,
+  "num_questions_generated": 22,
+  "difficulty": "medium",
+  "generation_time_seconds": 59.05,
+  "questions": [
+    {
+      "question": "What is the primary purpose of the NumPy library?",
+      "options": [
+        "A) For numerical computations, scientific computing, data analysis, and Machine Learning/Deep Learning",
+        "B) For web development and database management",
+        "C) For networking and cybersecurity",
+        "D) For game development and graphics design"
+      ],
+      "answer": "A"
+    },
+    {
+      "question": "What is the difference between using Python lists and NumPy arrays for element-wise operations?",
+      "options": [
+        "A) NumPy arrays are slower and more memory-intensive",
+        "B) NumPy arrays are faster and more memory-efficient",
+        "C) Python lists are faster and more memory-efficient",
+        "D) There is no difference between using Python lists and NumPy arrays"
+      ],
+      "answer": "B"
+    },
+    {
+      "question": "What is the function of the 'ndarray' object in NumPy?",
+      "options": [
+        "A) It is a one-dimensional array that can only represent data in one dimension",
+        "B) It is a multidimensional array that can represent data in one, two, three, or more dimensions",
+        "C) It is a data structure used for database management",
+        "D) It is a graphics library used for game development"
+      ],
+      "answer": "B"
+    },
+    {
+      "question": "How do you create a 1D array in NumPy?",
+      "options": [
+        "A) Using the 'array' function with a list of values",
+        "B) Using the 'zeros' function with a specified size",
+        "C) Using the 'ones' function with a specified size",
+        "D) Using the 'full' function with a specified size and value"
+      ],
+      "answer": "A"
+    },
+    {
+      "question": "What is the purpose of the 'shape' attribute in NumPy arrays?",
+      "options": [
+        "A) It returns the total number of elements in the array",
+        "B) It returns the dimensions of the array",
+        "C) It returns the data type of the array",
+        "D) It returns the memory occupied by the array"
+      ],
+      "answer": "B"
+    },
+    {
+      "question": "What is the difference between 'arange' and 'linspace' functions in NumPy?",
+      "options": [
+        "A) 'arange' takes a step size, while 'linspace' takes a count of evenly spaced points",
+        "B) 'arange' takes a count of evenly spaced points, while 'linspace' takes a step size",
+        "C) 'arange' is used for random number generation, while 'linspace' is used for linear algebra operations",
+        "D) 'arange' is used for data analysis, while 'linspace' is used for machine learning"
+      ],
+      "answer": "A"
+    },
+    {
+      "question": "What is the purpose of the 'random' module in NumPy?",
+      "options": [
+        "A) It is used for generating random numbers",
+        "B) It is used for data analysis and visualization",
+        "C) It is used for machine learning and deep learning",
+        "D) It is used for database management and networking"
+      ],
+      "answer": "A"
+    },
+    {
+      "question": "What is the purpose of the 'indexing' and 'slicing' operations in NumPy arrays?",
+      "options": [
+        "A) They are used for data analysis and visualization",
+        "B) They are used for machine learning and deep learning",
+        "C) They are used for accessing and manipulating specific elements or subsets of elements in an array",
+        "D) They are used for database management and networking"
+      ],
+      "answer": "C"
+    },
+    {
+      "question": "What is the difference between 'slicing' and 'fancy indexing' in NumPy arrays?",
+      "options": [
+        "A) Slicing uses a continuous range and returns a view, while fancy indexing uses a list of specific indices and returns a copy",
+        "B) Slicing uses a list of specific indices and returns a copy, while fancy indexing uses a continuous range and returns a view",
+        "C) Slicing is used for data analysis, while fancy indexing is used for machine learning",
+        "D) Slicing is used for database management, while fancy indexing is used for networking"
+      ],
+      "answer": "A"
+    },
+    {
+      "question": "What is the difference between NumPy arrays and Python lists?",
+      "options": [
+        "A) NumPy arrays are slower and more memory-intensive than Python lists",
+        "B) NumPy arrays are faster and more memory-efficient than Python lists",
+        "C) NumPy arrays are only used for numerical computations, while Python lists are used for all other data types",
+        "D) NumPy arrays are only used for small datasets, while Python lists are used for large datasets"
+      ],
+      "answer": "B"
+    },
+    {
+      "question": "What is the purpose of the 'reshape' function in NumPy?",
+      "options": [
+        "A) It changes the shape of an array without changing its data",
+        "B) It changes the data type of an array without changing its shape",
+        "C) It changes the size of an array without changing its shape or data type",
+        "D) It changes the memory occupied by an array without changing its shape or data type"
+      ],
+      "answer": "A"
+    },
+    {
+      "question": "What is the name of the powerful object in NumPy that is much faster and more memory-efficient than plain Python lists?",
+      "options": [
+        "A) ndarray",
+        "B) list",
+        "C) array",
+        "D) matrix"
+      ],
+      "answer": "A"
+    },
+    {
+      "question": "What is the function used to create an array filled with zeros in NumPy?",
+      "options": [
+        "A) np.zeros()",
+        "B) np.ones()",
+        "C) np.full()",
+        "D) np.empty()"
+      ],
+      "answer": "A"
+    },
+    {
+      "question": "What is the difference between np.arange() and np.linspace()?",
+      "options": [
+        "A) np.arange() takes a step size, while np.linspace() takes a count of evenly spaced points",
+        "B) np.arange() takes a count of evenly spaced points, while np.linspace() takes a step size",
+        "C) np.arange() is used for 1D arrays, while np.linspace() is used for 2D arrays",
+        "D) np.arange() is used for 2D arrays, while np.linspace() is used for 1D arrays"
+      ],
+      "answer": "A"
+    },
+    {
+      "question": "What is the attribute used to get the shape of an array in NumPy?",
+      "options": [
+        "A) shape",
+        "B) size",
+        "C) ndim",
+        "D) dtype"
+      ],
+      "answer": "A"
+    },
+    {
+      "question": "What is the function used to create an identity matrix in NumPy?",
+      "options": [
+        "A) np.eye()",
+        "B) np.zeros()",
+        "C) np.ones()",
+        "D) np.full()"
+      ],
+      "answer": "A"
+    },
+    {
+      "question": "What is the function used to reshape an array in NumPy?",
+      "options": [
+        "A) np.reshape()",
+        "B) np.resize()",
+        "C) np.transpose()",
+        "D) np.flatten()"
+      ],
+      "answer": "A"
+    },
+    {
+      "question": "What does NumPy stand for?",
+      "options": [
+        "A) Numerical Python",
+        "B) Normalized Universal Matrix Processor",
+        "C) Network Universal Matrix Processor",
+        "D) New Unified Matrix Processor"
+      ],
+      "answer": "A"
+    },
+    {
+      "question": "What is the main advantage of using NumPy arrays over Python lists?",
+      "options": [
+        "A) NumPy arrays are more memory-intensive",
+        "B) NumPy arrays are slower than Python lists",
+        "C) NumPy arrays are more flexible than Python lists",
+        "D) NumPy arrays are faster and more memory-efficient than Python lists"
+      ],
+      "answer": "D"
+    },
+    {
+      "question": "What is the purpose of the 'ndarray' in NumPy?",
+      "options": [
+        "A) To create a 2D array",
+        "B) To create a 3D array",
+        "C) To represent data in one or more dimensions",
+        "D) To perform linear algebra operations"
+      ],
+      "answer": "C"
+    },
+    {
+      "question": "How do you perform 1D indexing in NumPy arrays?",
+      "options": [
+        "A) arr[0, 1]",
+        "B) arr[0]",
+        "C) arr[0, 0, 1]",
+        "D) arr[0:1]"
+      ],
+      "answer": "B"
+    },
+    {
+      "question": "How do you create a copy of a NumPy array?",
+      "options": [
+        "A) arr.copy()",
+        "B) arr.view()",
+        "C) arr.base()",
+        "D) arr.astype()"
+      ],
+      "answer": "A"
+    }
+  ]
+}

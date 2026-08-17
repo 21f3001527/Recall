@@ -1,0 +1,45 @@
+{
+  "doc": "Numpy Notes.pdf",
+  "topics": [
+    {
+      "name": "ndarray creation and basic attributes",
+      "keywords": ["ndarray", "array creation", "np.array", "shape", "dtype", "ndim", "size"]
+    },
+    {
+      "name": "array indexing and slicing",
+      "keywords": ["indexing", "slicing", "index", "slice", "[:", "element access"]
+    },
+    {
+      "name": "broadcasting rules",
+      "keywords": ["broadcast", "broadcasting"]
+    },
+    {
+      "name": "reshaping and flattening arrays",
+      "keywords": ["reshape", "flatten", "ravel", "resize"]
+    },
+    {
+      "name": "aggregation functions",
+      "keywords": ["sum", "mean", "min", "max", "std", "var", "aggregate", "aggregation"]
+    },
+    {
+      "name": "vectorized operations",
+      "keywords": ["vectorized", "vectorization", "element-wise", "elementwise"]
+    },
+    {
+      "name": "boolean/fancy indexing and masking",
+      "keywords": ["boolean indexing", "fancy indexing", "mask", "masking", "boolean array"]
+    },
+    {
+      "name": "linear algebra operations",
+      "keywords": ["dot", "matmul", "linear algebra", "matrix multiplication", "transpose", "inverse", "determinant"]
+    },
+    {
+      "name": "random number generation",
+      "keywords": ["random", "np.random", "seed", "randint", "rand", "randn"]
+    },
+    {
+      "name": "stacking and splitting arrays",
+      "keywords": ["stack", "vstack", "hstack", "split", "concatenate", "concat"]
+    }
+  ]
+}
