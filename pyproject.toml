@@ -8,6 +8,8 @@ requires-python = ">=3.11,<3.14"
 dependencies = [
     "streamlit>=1.38",
     "python-dotenv>=1.0",
+
+    # LangChain
     "langchain==0.3.*",
     "langchain-core==0.3.*",
     "langchain-community==0.3.*",
@@ -15,13 +17,19 @@ dependencies = [
     "langchain-groq>=0.2",
     "langchain-huggingface>=0.1",
     "langchain-chroma>=0.2",
+
+    # RAG / Vector Store
     "chromadb>=0.5",
     "sentence-transformers>=3.0",
+
+    # PDF / Data Validation
     "pypdf>=4.0",
     "pydantic>=2.0",
+
+    # PyTorch for sentence-transformers
     "torch==2.11.0",
-    "torchvision==0.26.0",
-    "torchaudio==2.11.0",
+
+    # Evaluation
     "ragas>=0.4.3",
 ]
 

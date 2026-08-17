@@ -2,7 +2,7 @@
   {
     "question": "What is NumPy and what is its main array object?",
     "ground_truth": "NumPy is an open-source Python library used for numerical computation, scientific computing, data analysis, and machine learning/deep learning. Its main array object is the multidimensional ndarray.",
-    "answer": "NumPy (Numerical Python) is an open-source Python library used for numerical computations, scientific computing, data analysis, and Machine Learning / Deep Learning. \nIts main array object is called ndarray (N-dimensional array).",
+    "answer": "- **NumPy**: an open‑source Python library for numerical computations, scientific computing, data analysis, and machine learning / deep learning.  \n- **Main array object**: the **`ndarray`** (N‑dimensional array), which is faster and more memory‑efficient than plain Python lists.",
     "contexts": [
       {
         "page": 2,
@@ -25,7 +25,7 @@
   {
     "question": "Why is NumPy generally faster than plain Python lists for numerical operations?",
     "ground_truth": "NumPy uses optimized compiled C code and vectorized operations, avoiding Python-level loops. Its arrays also use a compact memory layout that is more cache-friendly.",
-    "answer": "NumPy is faster because it:\n* Internally uses optimized C code\n* Uses vectorized operations, which are significantly faster than Python loops\n* Stores array elements in contiguous memory blocks, which is cache-friendly",
+    "answer": "- Uses optimized C code internally, so operations run in compiled language rather than Python loops.  \n- Performs vectorized operations, eliminating explicit Python loops.  \n- Stores array elements in contiguous memory blocks, which is cache‑friendly and reduces memory overhead.",
     "contexts": [
       {
         "page": 2,
@@ -48,7 +48,7 @@
   {
     "question": "What is the difference between arange() and linspace() in NumPy?",
     "ground_truth": "arange() generates values using a specified step size, while linspace() generates a specified number of evenly spaced values between the start and stop values, including the stop value.",
-    "answer": "* arange() takes a step size\n* linspace() takes a count of evenly spaced points between start and stop (inclusive)",
+    "answer": "- **arange()**  \n  - Takes a *step size* (difference between consecutive values).  \n  - Generates values from start to stop (exclusive) with that step.\n\n- **linspace()**  \n  - Takes a *count* of evenly spaced points.  \n  - Generates values from start to stop (inclusive) with that number of points.",
     "contexts": [
       {
         "page": 5,
@@ -59,7 +59,7 @@
   {
     "question": "For an array with shape (2, 3), what are its ndim and size?",
     "ground_truth": "Its ndim is 2 because it has two dimensions, and its size is 6 because it contains 2 × 3 = 6 elements.",
-    "answer": "For an array with shape (2, 3):\n* ndim: 2\n* size: 6",
+    "answer": "- **ndim**: 2  \n- **size**: 6 (since 2 × 3 = 6 elements)",
     "contexts": [
       {
         "page": 9,
@@ -82,7 +82,7 @@
   {
     "question": "What is the difference between shape, size, ndim, and dtype in a NumPy array?",
     "ground_truth": "shape gives the dimensions of the array, size gives the total number of elements, ndim gives the number of dimensions, and dtype gives the data type of the elements.",
-    "answer": "The provided document does not explicitly explain the difference between all these terms. However, here's what can be found:\n\n* shape → the dimensions of the array (rows, columns, ...).\n* size → the total number of elements in the array.\n* dtype: The data type of the elements in the array, e.g., int64.\n\nInformation about 'ndim' is not present in the provided document.",
+    "answer": "I couldn't find that information in the uploaded document.",
     "contexts": [
       {
         "page": 6,
@@ -105,7 +105,7 @@
   {
     "question": "What is the difference between slicing and fancy indexing in NumPy?",
     "ground_truth": "Slicing uses a start:stop:step range and returns a view, while fancy indexing uses an explicit list of indices and returns a copy.",
-    "answer": "* Slicing uses a start:stop:step range and returns a view.\n* Fancy indexing uses an explicit list of indices and returns a copy.",
+    "answer": "- **Slicing**  \n  - Uses a continuous range (`start:stop:step`).  \n  - Returns a **view** of the original array.\n\n- **Fancy indexing**  \n  - Uses an explicit list or array of indices.  \n  - Returns a **copy** of the selected elements.",
     "contexts": [
       {
         "page": 19,
@@ -124,7 +124,7 @@
   {
     "question": "What is the difference between reshape(), ravel(), and flatten()?",
     "ground_truth": "reshape() changes the shape without changing the data when possible. ravel() flattens an array and returns a view when possible, while flatten() always returns a new copy.",
-    "answer": "The main differences are:\n* reshape(): returns a new view without changing the original, total elements must stay the same.\n* ravel(): returns a view (shares memory with original) whenever possible.\n* flatten(): always returns a new copy.",
+    "answer": "- **reshape()**  \n  - Creates a new view of the array with a different shape.  \n  - Does **not** modify the original array.  \n  - Total number of elements must stay the same (`rows × columns = original size`).\n\n- **ravel()**  \n  - Returns a **view** of the array whenever possible, so it shares memory with the original.  \n  - If a view cannot be created, it falls back to a copy.\n\n- **flatten()**  \n  - Always returns a **new copy** of the array in one dimension.  \n  - Does not share memory with the original array.",
     "contexts": [
       {
         "page": 8,
@@ -147,7 +147,7 @@
   {
     "question": "What happens when a NumPy view is modified?",
     "ground_truth": "A view shares the same underlying memory as the original array, so modifying the view can also modify the original array.",
-    "answer": "When a NumPy view is modified, the original array is also changed because they share the same underlying data buffer.",
+    "answer": "- Modifying a NumPy view changes the underlying data buffer, so the original array is updated as well.",
     "contexts": [
       {
         "page": 9,
@@ -170,7 +170,7 @@
   {
     "question": "What is the difference between view() and copy() in NumPy?",
     "ground_truth": "view() creates a new array object that shares the underlying memory with the original, while copy() creates an independent array with its own memory.",
-    "answer": "The difference between `view()` and `copy()` in NumPy is:\n* `view()` shares the same underlying memory as the original array.\n* `copy()` allocates a completely new, independent memory block.",
+    "answer": "- **`view()`**  \n  - Returns a new array that **shares the same underlying memory** as the original.  \n  - Modifying the view changes the original array (and vice‑versa).\n\n- **`copy()`**  \n  - Creates a **completely new, independent memory block**.  \n  - Changes to the copy do **not** affect the original array.",
     "contexts": [
       {
         "page": 19,
@@ -189,7 +189,7 @@
   {
     "question": "What is broadcasting in NumPy?",
     "ground_truth": "Broadcasting allows NumPy to perform arithmetic operations on arrays with different but compatible shapes by virtually expanding the smaller array without actually copying its data.",
-    "answer": "Broadcasting in NumPy lets the library perform arithmetic on arrays of different shapes by automatically \"stretching\" the smaller array without actually copying data. \n\nExample: \n- A scalar (e.g., 10) can be broadcast across every element of an array.\n- Output: [11 12 13] when adding 10 to an array [1, 2, 3]",
+    "answer": "- **Broadcasting** in NumPy allows arithmetic operations on arrays of different shapes by automatically “stretching” the smaller array to match the larger one, without copying data.  \n- Example: adding a scalar `10` to a 1‑D array `arr = np.array([1, 2, 3])` broadcasts the scalar across all elements, producing `[11, 12, 13]`.",
     "contexts": [
       {
         "page": 10,
@@ -204,7 +204,7 @@
   {
     "question": "What are the rules used to determine whether two NumPy array shapes are compatible for broadcasting?",
     "ground_truth": "Shapes are compared from the rightmost dimension moving left. Two dimensions are compatible when they are equal or when one of them is 1. If neither condition holds for a dimension, NumPy raises a ValueError.",
-    "answer": "The rules used to determine whether two NumPy array shapes are compatible for broadcasting are:\n* Rule 1: Compare shapes from the rightmost dimension moving left.\n* Rule 2: Two dimensions are compatible if they are equal, or one of them is 1.\n* Rule 3: If shapes are incompatible in any dimension (and neither is 1), NumPy raises a ValueError.",
+    "answer": "- **Rule 1**: Compare shapes from the right‑most dimension moving left.  \n- **Rule 2**: Two dimensions are compatible if they are equal, or if one of them is 1.  \n- **Rule 3**: If any dimension is incompatible (neither equal nor 1), NumPy raises a `ValueError`.",
     "contexts": [
       {
         "page": 10,
@@ -219,7 +219,7 @@
   {
     "question": "If a has shape (2, 3) and b has shape (3,), what happens when a + b is performed?",
     "ground_truth": "The (3,) array is broadcast across each row of the (2, 3) array, so element-wise addition is performed between b and every row of a.",
-    "answer": "The 1D array b is broadcast across each row of the 2D array a. \n\nBroadcasting Rules apply:\n- Compare shapes from the rightmost dimension moving left.\n- Two dimensions are compatible if they are equal, or one of them is 1.\n \nIn this case, b's shape (3,) is compatible with a's rightmost dimension (3), so b is broadcast to match a's shape, and element-wise addition is performed.",
+    "answer": "- `b` (shape `(3,)`) is broadcast across each row of `a` (shape `(2,3)`).\n- The operation performs element‑wise addition, producing a new `(2,3)` array.",
     "contexts": [
       {
         "page": 11,
@@ -242,7 +242,7 @@
   {
     "question": "What is a NumPy ufunc and why is it useful?",
     "ground_truth": "A ufunc, or universal function, performs an operation element-wise on NumPy arrays. Built-in ufuncs are implemented using compiled C loops, avoiding Python-level loops and providing efficient numerical operations.",
-    "answer": "* A ufunc (universal function) is a function that operates element-wise on ndarrays.\n* It is implemented in compiled C, making it much faster than an equivalent Python loop.\n* ufuncs are useful because they:\n  * Avoid Python-level loops entirely\n  * Provide a significant speed advantage\n  * Can be used for various mathematical operations, such as addition, multiplication, and comparison.",
+    "answer": "- **Definition**: A *ufunc* (universal function) is a NumPy function that operates element‑wise on `ndarray` objects.  \n- **Implementation**: It is written in compiled C, so it runs in tight loops without Python‑level overhead.  \n- **Why it matters**:  \n  - Provides a huge speed advantage over plain Python loops.  \n  - Enables efficient, vectorized arithmetic and logical operations on large arrays.",
     "contexts": [
       {
         "page": 12,
@@ -265,7 +265,7 @@
   {
     "question": "What is the difference between axis=0 and axis=1 when aggregating a 2D NumPy array?",
     "ground_truth": "axis=0 collapses the rows and performs the aggregation column-wise, while axis=1 collapses the columns and performs the aggregation row-wise.",
-    "answer": "The difference is:\n* axis=0: operates down the rows (column-wise aggregation)\n* axis=1: operates across the columns (row-wise aggregation)",
+    "answer": "- **axis=0**  \n  - Collapses the array **down the rows**.  \n  - Aggregates **column‑wise** (e.g., `np.sum(arr, axis=0)` sums each column).\n\n- **axis=1**  \n  - Collapses the array **across the columns**.  \n  - Aggregates **row‑wise** (e.g., `np.sum(arr, axis=1)` sums each row).",
     "contexts": [
       {
         "page": 19,
@@ -280,7 +280,7 @@
   {
     "question": "What is the difference between argmin() and min(), and between argmax() and max()?",
     "ground_truth": "min() and max() return the minimum and maximum values, while argmin() and argmax() return the indices of those values.",
-    "answer": "The difference is:\n* min() returns the minimum value in the array.\n* argmin() returns the index of the minimum value in the array.\n* max() returns the maximum value in the array.\n* argmax() returns the index of the maximum value in the array.",
+    "answer": "I couldn't find that information in the uploaded document.",
     "contexts": [
       {
         "page": 12,
@@ -291,7 +291,7 @@
   {
     "question": "What is the difference between element-wise multiplication and matrix multiplication in NumPy?",
     "ground_truth": "The * operator performs element-wise multiplication, multiplying corresponding elements. The @ operator, np.dot(), or np.matmul() performs matrix multiplication using row-column products.",
-    "answer": "The difference between element-wise multiplication and matrix multiplication in NumPy is:\n* Element-wise multiplication: `a * b` multiplies corresponding elements.\n* Matrix multiplication: `a @ b` (or `np.dot(a, b)`) performs true matrix multiplication (dot product of rows and columns).",
+    "answer": "- **Element‑wise multiplication** (`a * b`)  \n  - Multiplies corresponding elements of the two arrays.  \n  - Requires the arrays to have the same shape (or broadcastable shapes).  \n\n- **Matrix multiplication** (`a @ b` or `np.dot(a, b)`)  \n  - Computes the dot product of rows of `a` with columns of `b`.  \n  - The inner dimensions must match (e.g., `a` is `m×n`, `b` is `n×p`).  \n  - Produces a new array of shape `m×p`.",
     "contexts": [
       {
         "page": 15,
@@ -314,7 +314,7 @@
   {
     "question": "What is the difference between np.vstack() and np.stack()?",
     "ground_truth": "vstack() joins arrays vertically along an existing axis, while stack() creates a new dimension when combining the arrays.",
-    "answer": "The difference between np.vstack() and np.stack() is:\n* vstack() joins arrays along an existing axis.\n* stack() creates a brand-new dimension.",
+    "answer": "- **`np.vstack()`**  \n  - Concatenates arrays **vertically** (along the existing axis 0).  \n  - It is a convenience wrapper around `np.concatenate` with `axis=0`.  \n  - Does **not** create a new dimension; the resulting array has the same number of dimensions as the inputs.\n\n- **`np.stack()`**  \n  - Stacks arrays along a **new** axis that you specify with the `axis` argument.  \n  - Creates an additional dimension in the output array.  \n  - Useful when you need to add a new axis rather than just concatenate along an existing one.",
     "contexts": [
       {
         "page": 19,
@@ -337,7 +337,7 @@
   {
     "question": "What is the difference between np.random.shuffle() and np.random.permutation()?",
     "ground_truth": "shuffle() modifies the original array in place, while permutation() returns a new shuffled copy and leaves the original array unchanged.",
-    "answer": "The difference between np.random.shuffle() and np.random.permutation() is:\n* np.random.shuffle() shuffles the array in-place, modifying the original array.\n* np.random.permutation() returns a new shuffled copy, leaving the original array unchanged.",
+    "answer": "- **`np.random.shuffle(arr)`**\n  * Shuffles the array **in‑place** – the original array is modified.\n\n- **`np.random.permutation(arr)`**\n  * Returns a **new shuffled copy** of the array – the original array remains unchanged.",
     "contexts": [
       {
         "page": 17,
@@ -348,7 +348,7 @@
   {
     "question": "Why is np.random.seed() useful in machine learning experiments?",
     "ground_truth": "Setting a random seed makes random results reproducible, which is useful for debugging experiments and ensuring that results can be reproduced.",
-    "answer": "np.random.seed() is useful in machine learning experiments because it makes 'random' results reproducible, which is essential for debugging and sharing results.",
+    "answer": "- **Reproducibility** – Setting a seed makes random number generation deterministic, so the same experiment can be run again with identical results.  \n- **Debugging** – With a fixed seed, you can isolate bugs in your ML pipeline without random variation masking the issue.  \n- **Result sharing** – Others can replicate your findings exactly, which is essential for scientific rigor and collaboration.",
     "contexts": [
       {
         "page": 17,
@@ -371,7 +371,7 @@
   {
     "question": "What is the difference between NumPy .npy/.npz files and CSV/text files?",
     "ground_truth": ".npy and .npz preserve NumPy array dtype and shape and generally load faster, while CSV/text files are human-readable and more portable across tools such as Excel and Pandas.",
-    "answer": "The differences are:\n* .npy/.npz files:\n  + Preserve exact dtype and shape\n  + Load faster\n* .csv/.txt files:\n  + Human-readable\n  + Portable across tools like Excel or Pandas",
+    "answer": "- **.npy / .npz**  \n  - Binary format that preserves the exact data type and array shape.  \n  - Loads faster because no parsing is required.  \n  - Not human‑readable but ideal for efficient storage and quick loading of NumPy arrays.\n\n- **.csv / .txt**  \n  - Text format that is human‑readable and can be opened in Excel, Pandas, etc.  \n  - Portable across many tools, but may lose exact dtype information and requires parsing, so loading is slower.",
     "contexts": [
       {
         "page": 18,

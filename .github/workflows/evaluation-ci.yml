@@ -2,7 +2,7 @@ name: Evaluation Regression Tests
 
 # Two tiers, because the full evaluation pipelines call the Groq API and
 # this project runs on Groq's free tier (100K tokens/day for
-# llama-3.3-70b-versatile) -- running the full pipelines on every push
+# # openai/gpt-oss-20b) -- running the full pipelines on every push
 # would exhaust the quota almost immediately and make CI unreliable.
 #
 # 1. sanity-checks: runs on every push/PR. Free, deterministic structural

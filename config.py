@@ -34,7 +34,7 @@ CHROMA_DIR.mkdir(exist_ok=True)
 # ──────────────────────────────────────────────────────────────────────────────
 
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
-GROQ_MODEL = "llama-3.3-70b-versatile"
+GROQ_MODEL = "openai/gpt-oss-20b"
 EVAL_MODEL = "llama-3.1-8b-instant"     # ← add this line
 
 # ──────────────────────────────────────────────────────────────────────────────
