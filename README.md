@@ -4,14 +4,17 @@
 
 **An AI-powered study workspace that turns PDF notes into summaries, quizzes, flashcards, and a history-aware RAG chat assistant.**
 
-[![CI](https://github.com/21f3001527/Recall/actions/workflows/evaluation-ci.yml/badge.svg)](https://github.com/21f3001527/Recall/actions/workflows/evaluation-ci.yml)
-![Python](https://img.shields.io/badge/Python-3.12-blue)
-![LangChain](https://img.shields.io/badge/LangChain-Framework-green)
-![Streamlit](https://img.shields.io/badge/Streamlit-UI-red)
-![Groq](https://img.shields.io/badge/Inference-Groq-F55036)
-![ChromaDB](https://img.shields.io/badge/Vector%20Store-ChromaDB-7C3AED)
-![uv](https://img.shields.io/badge/Package%20Manager-uv-DE5FE9)
-![License](https://img.shields.io/badge/License-Educational-lightgrey)
+[![CI](https://img.shields.io/github/actions/workflow/status/21f3001527/Recall/evaluation-ci.yml?style=for-the-badge&logo=githubactions&logoColor=white&label=CI&color=2EA44F)](https://github.com/21f3001527/Recall/actions/workflows/evaluation-ci.yml)
+[![Stars](https://img.shields.io/github/stars/21f3001527/Recall?style=for-the-badge&logo=github&logoColor=white&color=FFD21E&labelColor=181717)](https://github.com/21f3001527/Recall/stargazers)
+[![Last Commit](https://img.shields.io/github/last-commit/21f3001527/Recall?style=for-the-badge&logo=git&logoColor=white&color=F05032&labelColor=181717)](https://github.com/21f3001527/Recall/commits)
+![License](https://img.shields.io/badge/License-Educational-6B7280?style=for-the-badge&labelColor=181717)
+
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-Orchestration-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-UI-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
+![Groq](https://img.shields.io/badge/Groq-Inference-F55036?style=for-the-badge&logoColor=white)
+![ChromaDB](https://img.shields.io/badge/ChromaDB-Vector%20Store-7C3AED?style=for-the-badge&logoColor=white)
+![uv](https://img.shields.io/badge/uv-Package%20Manager-DE5FE9?style=for-the-badge&logoColor=white)
 
 </div>
 
@@ -49,6 +52,10 @@
 
 Upload a document and access Chat, Summary, Quiz, and Flashcards from the same knowledge source.
 
+<details>
+<summary><b>Click to view screenshots</b></summary>
+<br>
+
 <div align="center">
 
 <table>
@@ -75,6 +82,8 @@ Upload a document and access Chat, Summary, Quiz, and Flashcards from the same k
 </table>
 
 </div>
+
+</details>
 
 ---
 
@@ -134,7 +143,7 @@ Evaluation results are protected by GitHub Actions using two tiers.
 
 ### 1. Sanity Checks — Every Push / PR
 
-- Runs automatically on `main`
+- Runs automatically on pushes to `main` and pull requests targeting `main`
 - No LLM/API calls
 - Validates committed evaluation JSON files
 - Checks structural integrity of generated outputs
