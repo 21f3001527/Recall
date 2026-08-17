@@ -1,6 +1,6 @@
 # 🎓 Study Assistant
 
-[![CI](https://github.com/<username>/Recall/actions/workflows/evaluation-ci.yml/badge.svg)](https://github.com/<username>/Recall/actions/workflows/evaluation-ci.yml)
+[![CI](https://github.com/21f3001527/Recall/actions/workflows/evaluation-ci.yml/badge.svg)](https://github.com/21f3001527/Recall/actions/workflows/evaluation-ci.yml)
 ![Python](https://img.shields.io/badge/python-3.12-blue)
 
 > An AI-powered study workspace that turns PDF notes into summaries, quizzes, flashcards, and a history-aware RAG chat assistant.
@@ -55,11 +55,11 @@ Upload a document and access Chat, Summary, Quiz, and Flashcards from the same k
 
 | Chat / RAG | Quiz |
 |---|---|
-| ![RAG Chat](assets/chat.png) | ![Quiz](assets/quiz.png) |
+| ![RAG Chat](assets/study_assistant_chat.png) | ![Quiz](assets/study_assistant_quiz.png) |
 
 | Flashcards | Summary |
 |---|---|
-| ![Flashcards](assets/flashcards.png) | ![Summary](assets/summary.png) |
+| ![Flashcards](assets/study_assistant_flashcards.png) | ![Summary](assets/study_assistant_summary.png) |
 
 ---
 
@@ -134,9 +134,7 @@ Evaluation results are protected by GitHub Actions using two tiers.
 - Uploads refreshed results as GitHub Actions artifacts
 - Does not automatically commit regenerated results
 
-![GitHub Actions](assets/ci-sanity-check.png)
-
-![Full Evaluation](assets/ci-full-evaluation.png)
+![GitHub Actions](assets/github-actions-evaluatio.png)
 
 ---
 
