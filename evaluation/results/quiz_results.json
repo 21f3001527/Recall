@@ -203,7 +203,7 @@
         "C) To represent data in one or more dimensions",
         "D) To perform linear algebra operations"
       ],
-      "answer": "C"
+      "answer": "mdnfdgvn,fngfmg"
     },
     {
       "question": "How do you perform 1D indexing in NumPy arrays?",
@@ -223,7 +223,7 @@
         "C) arr.base()",
         "D) arr.astype()"
       ],
-      "answer": "alpha"
+      "answer": "A"
     }
   ]
 }
