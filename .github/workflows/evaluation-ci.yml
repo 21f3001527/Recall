@@ -1,14 +1,37 @@
 name: Evaluation Regression Tests
 
-# TEST VERSION -- only the quiz sanity check is wired up for now, to
-# confirm the pass/fail gate works correctly in GitHub Actions before
-# adding chat, flashcards, and summary.
+# Two tiers, because the full evaluation pipelines call the Groq API and
+# this project runs on Groq's free tier (100K tokens/day for
+# llama-3.3-70b-versatile) -- running the full pipelines on every push
+# would exhaust the quota almost immediately and make CI unreliable.
+#
+# 1. sanity-checks: runs on every push/PR. Free, deterministic structural
+#    checks against the CURRENTLY COMMITTED evaluation/results/*.json
+#    files. No API calls. Fails the build if a structural regression is
+#    committed (verified end-to-end: passes on valid data, fails on
+#    deliberately-broken data -- see commits 9e9122e / 0c45895).
+#
+# 2. full-evaluation: manual (workflow_dispatch) or weekly scheduled.
+#    Actually regenerates and re-judges everything against the live Groq
+#    API, using GROQ_API_KEY from repo secrets. Uploads the refreshed
+#    results as a build artifact for review -- it does NOT auto-commit
+#    them, so a human decides whether to accept the new results.
 
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+  schedule:
+    # Weekly, Monday 06:00 UTC. Adjust or remove if you'd rather trigger
+    # full evaluation manually only.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      run_full_evaluation:
+        description: "Run the full live evaluation pipelines (uses Groq API quota)"
+        type: boolean
+        default: false
 
 jobs:
   sanity-checks:
@@ -25,5 +48,71 @@ jobs:
       - name: Install dependencies
         run: uv sync
 
+      - name: Analyze chat evaluation results
+        run: uv run python -m evaluation.analyze_chat_results
+
+      - name: Analyze flashcard evaluation results
+        run: uv run python -m evaluation.analyze_flashcards_results
+
       - name: Analyze quiz evaluation results
         run: uv run python -m evaluation.analyze_quiz_results
+
+      - name: Analyze summary evaluation results
+        run: uv run python -m evaluation.analyze_summary_results
+
+  full-evaluation:
+    name: Full live evaluation (uses Groq quota)
+    runs-on: ubuntu-latest
+    # Only runs on the weekly schedule, or when manually triggered with
+    # run_full_evaluation=true. Never runs on ordinary pushes/PRs.
+    if: >
+      github.event_name == 'schedule' ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.run_full_evaluation == 'true')
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Chat evaluation
+        run: |
+          uv run python -m evaluation.evaluate_chat
+          uv run python -m evaluation.analyze_chat_results
+          uv run python -m evaluation.ragas_eval_chat
+
+      - name: Flashcard evaluation
+        run: |
+          uv run python -m evaluation.evaluate_flashcards
+          uv run python -m evaluation.analyze_flashcards_results
+          uv run python -m evaluation.judge_flashcards
+
+      - name: Quiz evaluation
+        # --wait-and-retry lets this survive transient 429s during the run
+        # rather than stopping partway; it can still legitimately generate
+        # fewer than 50 if the source document runs out of distinct content
+        # (see README) -- analyze_quiz_results only fails on structural
+        # defects, not on a lower-than-requested count.
+        run: |
+          uv run python -m evaluation.evaluate_quiz --num-questions 50 --batch-size 10 --wait-and-retry
+          uv run python -m evaluation.analyze_quiz_results
+          uv run python -m evaluation.judge_quiz
+
+      - name: Summary evaluation
+        run: |
+          uv run python -m evaluation.evaluate_summary
+          uv run python -m evaluation.analyze_summary_results
+          uv run python -m evaluation.judge_summary
+
+      - name: Upload refreshed evaluation results
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluation-results-${{ github.run_id }}
+          path: evaluation/results/
+          retention-days: 30

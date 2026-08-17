@@ -223,7 +223,7 @@
         "C) arr.base()",
         "D) arr.astype()"
       ],
-      "answer": "alpha"
+      "answer": "A"
     }
   ]
 }
