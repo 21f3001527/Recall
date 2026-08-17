@@ -1,9 +1,19 @@
+<div align="center">
+
 # 🎓 Study Assistant
 
-[![CI](https://github.com/21f3001527/Recall/actions/workflows/evaluation-ci.yml/badge.svg)](https://github.com/21f3001527/Recall/actions/workflows/evaluation-ci.yml)
-![Python](https://img.shields.io/badge/python-3.12-blue)
+**An AI-powered study workspace that turns PDF notes into summaries, quizzes, flashcards, and a history-aware RAG chat assistant.**
 
-> An AI-powered study workspace that turns PDF notes into summaries, quizzes, flashcards, and a history-aware RAG chat assistant.
+[![CI](https://github.com/21f3001527/Recall/actions/workflows/evaluation-ci.yml/badge.svg)](https://github.com/21f3001527/Recall/actions/workflows/evaluation-ci.yml)
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![LangChain](https://img.shields.io/badge/LangChain-Framework-green)
+![Streamlit](https://img.shields.io/badge/Streamlit-UI-red)
+![Groq](https://img.shields.io/badge/Inference-Groq-F55036)
+![ChromaDB](https://img.shields.io/badge/Vector%20Store-ChromaDB-7C3AED)
+![uv](https://img.shields.io/badge/Package%20Manager-uv-DE5FE9)
+![License](https://img.shields.io/badge/License-Educational-lightgrey)
+
+</div>
 
 ---
 
@@ -35,31 +45,36 @@
 
 ---
 
-## 🎯 Use Cases
-
-| Scenario | How it helps |
-|---|---|
-| 📖 **Exam prep from lecture notes** | Upload a PDF, get a summary, then quiz yourself with auto-generated MCQs |
-| 🔁 **Long-term retention** | Flashcards + SM-2 scheduling bring cards back right before you'd forget them |
-| ❓ **Clarifying dense material** | RAG chat answers specific questions grounded in the document, with page citations |
-| 🧪 **Self-testing before an exam** | Quiz history tracks score trends over repeated attempts |
-| 🛠️ **Evaluating your own RAG/LLM pipeline** | The evaluation suite (RAGAS + LLM-as-Judge + CI) doubles as a template for testing other LangChain apps |
-
----
-
-## 🖥️ Application
+## 🖥️ Application Screenshots
 
 Upload a document and access Chat, Summary, Quiz, and Flashcards from the same knowledge source.
 
-### 📸 Application Screenshots
+<div align="center">
 
-| Chat / RAG | Quiz |
-|---|---|
-| ![RAG Chat](assets/study_assistant_chat.png) | ![Quiz](assets/study_assistant_quiz.png) |
+<table>
+<tr>
+<td align="center" width="50%">
+<img src="assets/study_assistant_chat.png" width="100%"><br>
+<sub><b>RAG Chat</b> — grounded Q&A with source-page references</sub>
+</td>
+<td align="center" width="50%">
+<img src="assets/study_assistant_quiz.png" width="100%"><br>
+<sub><b>Quiz</b> — auto-generated MCQs with score history</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="50%">
+<img src="assets/study_assistant_flashcards.png" width="100%"><br>
+<sub><b>Flashcards</b> — SM-2 spaced repetition</sub>
+</td>
+<td align="center" width="50%">
+<img src="assets/study_assistant_summary.png" width="100%"><br>
+<sub><b>Summary</b> — structured notes from your PDF</sub>
+</td>
+</tr>
+</table>
 
-| Flashcards | Summary |
-|---|---|
-| ![Flashcards](assets/study_assistant_flashcards.png) | ![Summary](assets/study_assistant_summary.png) |
+</div>
 
 ---
 
@@ -86,10 +101,10 @@ Each component is evaluated according to its failure mode using deterministic ch
 
 | Component | Evaluation | Current Results |
 |---|---|---|
-| 💬 Chat / RAG | Retrieval sanity checks + RAGAS | 100% retrieval rate · Faithfulness 0.87–0.94 · Context Recall 0.91 |
+| 💬 Chat / RAG | Retrieval sanity checks + RAGAS | 100% questions retrieved context (sanity check) · Faithfulness 0.87–0.94 · Context Recall 0.91 (RAGAS) |
 | 🗂️ Flashcards | Structural checks + LLM-as-Judge | 5.0/5 across all metrics · 100% topic coverage |
 | 🧠 Quiz | Structural checks + LLM-as-Judge | 4.0–5.0/5 · 70% topic coverage · 22 unique questions |
-| 📝 Summary | Structural checks + LLM-as-Judge | 4.0–5.0/5 · ~9.4% source-to-summary ratio |
+| 📝 Summary | Structural checks + LLM-as-Judge | Faithfulness 5.0/5 · Coverage 5.0/5 · ~9.4% compression ratio |
 
 ### Key Findings
 
@@ -102,7 +117,7 @@ Each component is evaluated according to its failure mode using deterministic ch
 
 Pattern is the same for `chat`, `flashcards`, `quiz`, `summary`:
 
-```
+```bash
 uv run python -m evaluation.evaluate_<component>
 uv run python -m evaluation.analyze_<component>_results
 uv run python -m evaluation.judge_<component>       # not used for chat
@@ -138,6 +153,36 @@ Evaluation results are protected by GitHub Actions using two tiers.
 
 ---
 
+## 📂 Project Structure
+
+```text
+Recall/
+├── app.py
+├── config.py
+├── backend/                    # chat, quiz, flashcards, summarizer, vectorstore, db
+├── evaluation/
+│   ├── dataset/                 # eval question sets
+│   ├── results/                 # generated JSON evaluation output
+│   ├── evaluate_*.py            # generation pipelines
+│   ├── analyze_*_results.py     # deterministic checks
+│   ├── judge_*.py               # LLM-as-Judge
+│   └── ragas_eval_chat.py
+├── assets/                      # screenshots
+├── data/
+│   ├── chroma_db/                # embeddings
+│   └── study_assistant.db        # quiz + flashcard history
+├── sample_docs/
+│   └── Numpy Notes.pdf
+├── .github/
+│   └── workflows/
+│       └── evaluation-ci.yml
+├── pyproject.toml
+├── uv.lock
+└── README.md
+```
+
+---
+
 ## 🚀 Getting Started
 
 ```bash
@@ -150,32 +195,6 @@ echo "GROQ_API_KEY=your_api_key" > .env
 
 uv run streamlit run app.py
 # open http://localhost:8501
-```
-
----
-
-## 📂 Project Structure
-
-```text
-Recall/
-├── app.py
-├── config.py
-├── backend/                  # chat, quiz, flashcards, summarizer, vectorstore, db
-├── evaluation/
-│   ├── dataset/               # eval question sets
-│   ├── results/                # generated JSON evaluation output
-│   ├── evaluate_*.py           # generation pipelines
-│   ├── analyze_*_results.py    # deterministic checks
-│   ├── judge_*.py               # LLM-as-Judge
-│   └── ragas_eval_chat.py
-├── assets/                    # screenshots
-├── data/
-│   ├── chroma_db/              # embeddings
-│   └── study_assistant.db      # quiz + flashcard history
-├── sample_docs/Numpy Notes.pdf
-├── .github/workflows/evaluation-ci.yml
-├── pyproject.toml / uv.lock
-└── README.md
 ```
 
 ---
@@ -195,7 +214,12 @@ Recall/
 
 ## 🚧 Future Improvements
 
-Multi-document RAG · semantic topic-coverage matching · human vs LLM-judge comparison · cost/latency tracking · better quiz distractors · broader eval datasets
+- Multi-document RAG
+- Semantic topic-coverage matching
+- Human vs LLM-judge comparison
+- Cost/latency tracking
+- Better quiz distractors
+- Broader eval datasets
 
 ---
 
