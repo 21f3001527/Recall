@@ -332,8 +332,8 @@ http://localhost:8501
 ```
 
 Upload a PDF and start studying.
+> Want to run the evaluation suite? See the **[Evaluation Guide](EVALUATION.md)** for per-component commands.
 
-> Want to run the evaluation suite? See **[EVALUATION.md](EVALUATION.md)** for per-component commands.
 
 ---
 
