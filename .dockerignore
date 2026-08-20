@@ -1,0 +1,13 @@
+.venv
+.env
+__pycache__
+*.pyc
+.git
+.github
+data/chroma_db
+data/study_assistant.db
+evaluation/results
+assets
+*.md
+.pytest_cache
+.ruff_cache

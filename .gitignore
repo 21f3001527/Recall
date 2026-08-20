@@ -4,3 +4,4 @@ __pycache__/
 data/chroma_db/
 data/*.db
 .env
+.streamlit/

@@ -376,6 +376,69 @@ This turns generated flashcards from a one-time activity into a recurring study 
 
 ---
 
+
+---
+
+## 🐳 Docker
+
+The application can also be run as a Docker container using Docker Compose.
+
+### Run with Docker Compose
+
+```bash
+docker compose up --build
+The application will be available at:
+
+http://localhost:8501
+
+To stop the application:
+
+docker compose down
+
+Docker is used to provide a consistent runtime environment with Python, project dependencies, Streamlit, and the application code.
+
+
+
+### 2. Add the demo section
+
+
+I would actually put this **before Docker**, so the ending becomes:
+
+
+```markdown
+---
+
+
+## 🎥 Demo
+
+
+![Study Assistant Demo](assets/study_assistant_demo.gif)
+
+
+---
+
+
+## 🐳 Docker
+
+
+The application can also be run using Docker Compose.
+
+
+### Run with Docker Compose
+
+
+```bash
+docker compose up --build
+
+Open the application at:
+
+http://localhost:8501
+
+To stop the application:
+
+docker compose down
+
+Docker provides a consistent runtime environment for the Streamlit application and its dependencies.
 ## 🚧 Future Improvements
 
 - [ ] Multi-document RAG

@@ -1,0 +1,11 @@
+services:
+  study-assistant:
+    build: .
+    ports:
+      - "8502:8501"
+    env_file:
+      - .env
+    volumes:
+      # Persist ChromaDB + SQLite data across container restarts/rebuilds
+      - ./data:/app/data
+    restart: unless-stopped
