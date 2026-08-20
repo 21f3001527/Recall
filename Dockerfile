@@ -38,4 +38,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
     CMD curl --fail http://localhost:${PORT}/_stcore/health || exit 1
 
 # ---- Start Streamlit ----
-CMD ["sh", "-c", "uv run streamlit run app.py --server.port=${PORT:-8501} --server.address=0.0.0.0"]
+CMD ["sh", "-c", "uv run streamlit run app.py --server.port=${PORT:-8501} --server.address=0.0.0.0 --server.fileWatcherType=none"]
