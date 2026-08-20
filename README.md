@@ -10,6 +10,16 @@ Built with **LangChain · Groq · ChromaDB · HuggingFace Embeddings · Streamli
 
 <br>
 
+### 🔗 [Live Demo → study-assistant-ks5o.onrender.com](https://study-assistant-ks5o.onrender.com)
+
+> Hosted on Render's free tier — the app may take ~30–50s to wake up on first load if it's been idle.
+
+<br>
+
+![Study Assistant Demo](assets/study_assistant_demo.gif)
+
+<br>
+
 [![CI](https://img.shields.io/github/actions/workflow/status/21f3001527/Recall/evaluation-ci.yml?style=for-the-badge&logo=githubactions&logoColor=white&label=CI&labelColor=181717&color=2EA44F)](https://github.com/21f3001527/Recall/actions/workflows/evaluation-ci.yml)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white&labelColor=181717)](https://www.python.org/)
 [![LangChain](https://img.shields.io/badge/LangChain-Orchestration-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white&labelColor=181717)](https://www.langchain.com/)
@@ -17,6 +27,7 @@ Built with **LangChain · Groq · ChromaDB · HuggingFace Embeddings · Streamli
 [![Groq](https://img.shields.io/badge/Groq-Inference-F55036?style=for-the-badge&labelColor=181717)](https://groq.com/)
 [![ChromaDB](https://img.shields.io/badge/ChromaDB-Vector_Store-7C3AED?style=for-the-badge&labelColor=181717)](https://www.trychroma.com/)
 [![uv](https://img.shields.io/badge/uv-Package_Manager-DE5FE9?style=for-the-badge&labelColor=181717)](https://docs.astral.sh/uv/)
+[![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?style=for-the-badge&logo=docker&logoColor=white&labelColor=181717)](https://www.docker.com/)
 
 </div>
 
@@ -105,6 +116,8 @@ Structured summaries generated from the uploaded PDF.
 | **UI** | Streamlit | Interactive study interface |
 | **Evaluation** | RAGAS + LLM-as-Judge | LLM/RAG quality evaluation |
 | **Package Management** | uv | Dependency and environment management |
+| **Containerization** | Docker + Docker Compose | Reproducible local runtime and deployment |
+| **Deployment** | Render (Docker Web Service) | Hosting the live demo |
 | **CI/CD** | GitHub Actions | Automated regression testing |
 
 ---
@@ -267,6 +280,7 @@ Recall/
 │   └── ragas_eval_chat.py
 │
 ├── assets/
+│   ├── study_assistant_demo.gif
 │   ├── study_assistant_chat.png
 │   ├── study_assistant_quiz.png
 │   ├── study_assistant_flashcards.png
@@ -284,6 +298,10 @@ Recall/
 │   └── workflows/
 │       └── evaluation-ci.yml
 │
+├── Dockerfile
+├── Dockerfile.render
+├── docker-compose.yml
+├── .dockerignore
 ├── pyproject.toml
 ├── uv.lock
 ├── README.md
@@ -334,6 +352,44 @@ http://localhost:8501
 Upload a PDF and start studying.
 > Want to run the evaluation suite? See the **[Evaluation Guide](EVALUATION.md)** for per-component commands.
 
+---
+
+## 🐳 Docker
+
+The application is fully containerized. There are two Docker setups in this repo, for two different purposes:
+
+| File | Purpose |
+|---|---|
+| `Dockerfile` + `docker-compose.yml` | Local development — fixed port `8501`, mounts `./data` as a volume so ChromaDB and SQLite persist across container restarts |
+| `Dockerfile.render` | Production deployment on Render — binds dynamically to Render's injected `$PORT` env var |
+
+### Run locally with Docker Compose
+
+```bash
+docker compose up --build
+```
+
+Open the app at:
+
+```
+http://localhost:8501
+```
+
+Stop the app:
+
+```bash
+docker compose down
+```
+
+`GROQ_API_KEY` is loaded from a local `.env` file via `env_file` in `docker-compose.yml`. Study data (vector store + quiz/flashcard history) persists on the host under `./data`, since it's mounted as a volume into the container.
+
+### Deployment (Render)
+
+The [live demo](https://study-assistant-ks5o.onrender.com) runs as a Docker Web Service on Render, built from `Dockerfile.render`:
+
+- Render injects `PORT` at runtime, so the container's `CMD` binds Streamlit to `${PORT:-10000}` instead of a hardcoded port
+- `GROQ_API_KEY` is set as an environment variable in Render's dashboard — `config.py` already falls back to `os.getenv("GROQ_API_KEY")` when `st.secrets` isn't available, so no code changes were needed
+- The free tier has no persistent disk, so `data/` resets on redeploys/restarts — acceptable for a portfolio demo, since the goal is to showcase functionality rather than long-term storage
 
 ---
 
@@ -352,6 +408,8 @@ data/
 ```
 
 To completely reset local application data, delete the `data/` directory. The required stores will be recreated automatically.
+
+> Note: on the Render-hosted live demo, this data does not persist across restarts (see Docker section above).
 
 ---
 
@@ -373,72 +431,10 @@ This turns generated flashcards from a one-time activity into a recurring study 
 | Judge run stops partway | Re-run the judge; completed items are checkpointed |
 | Fewer quiz questions than requested | The source document may not contain enough distinct content after duplicate filtering |
 | Poor retrieval | Run `analyze_chat_results.py` and inspect the retrieved contexts |
+| Live demo is slow to load | Render's free tier sleeps after inactivity; the first request wakes it up and takes ~30–50s |
 
 ---
 
-
----
-
-## 🐳 Docker
-
-The application can also be run as a Docker container using Docker Compose.
-
-### Run with Docker Compose
-
-```bash
-docker compose up --build
-The application will be available at:
-
-http://localhost:8501
-
-To stop the application:
-
-docker compose down
-
-Docker is used to provide a consistent runtime environment with Python, project dependencies, Streamlit, and the application code.
-
-
-
-### 2. Add the demo section
-
-
-I would actually put this **before Docker**, so the ending becomes:
-
-
-```markdown
----
-
-
-## 🎥 Demo
-
-
-![Study Assistant Demo](assets/study_assistant_demo.gif)
-
-
----
-
-
-## 🐳 Docker
-
-
-The application can also be run using Docker Compose.
-
-
-### Run with Docker Compose
-
-
-```bash
-docker compose up --build
-
-Open the application at:
-
-http://localhost:8501
-
-To stop the application:
-
-docker compose down
-
-Docker provides a consistent runtime environment for the Streamlit application and its dependencies.
 ## 🚧 Future Improvements
 
 - [ ] Multi-document RAG
